@@ -1,0 +1,43 @@
+{
+  "cli_version": "0.13.4",
+  "checkpoint_id": "01M7Q4EFJNETX4C5PR38NKHWAD",
+  "session_id": "38cca9af-f43d-418d-9c52-ba4770d327c9",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-18T10:50:09.012479757Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md"
+  ],
+  "agent": "Antigravity",
+  "model": "",
+  "turn_id": "0683a85990af",
+  "token_usage": {
+    "input_tokens": 14973,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 506940,
+    "output_tokens": 1239,
+    "api_call_count": 6
+  },
+  "session_token_usage": {
+    "input_tokens": 280898,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 5759668,
+    "output_tokens": 22729,
+    "api_call_count": 105
+  },
+  "redaction": {
+    "replacements": 24,
+    "layers": {
+      "betterleaks": 3,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 23,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
