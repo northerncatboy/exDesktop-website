@@ -1,0 +1,28 @@
+# Project Cartography & Session Logs
+.PROJECT_MAP.md
+.SESSION_LOG.md
+
+# Logs
+*.log
+*.log.*
+
+# Build & Tool Denylist
+.gradle/
+build/
+gradle/
+gradlew
+gradlew.bat
+.idea/
+*.iml
+*.ipr
+*.iws
+*.tmpdd
+
+# OS & Editor Artifacts
+.DS_Store
+Thumbs.db
+node_modules/
+
+# Entire local configuration & cache
+.entire/tmp/
+.entire/settings.local.json
