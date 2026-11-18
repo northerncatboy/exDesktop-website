@@ -1,0 +1,54 @@
+{
+  "cli_version": "0.13.4",
+  "checkpoint_id": "01M7R4DQYKVCYGXN402CS0XEBJ",
+  "session_id": "38cca9af-f43d-418d-9c52-ba4770d327c9",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-18T20:08:59.460873858Z",
+  "branch": "release",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "public/docs/ai/exdesktop-plugins/SKILL.md",
+    "public/docs/ai/prompt.md",
+    "src/App.tsx",
+    "src/components/FullWiki.tsx",
+    "src/components/QuickWiki.tsx",
+    "src/data/aiPromptData.ts",
+    "src/data/siteData.ts"
+  ],
+  "agent": "Antigravity",
+  "model": "",
+  "turn_id": "a6802c26a5ef",
+  "checkpoint_transcript_start": 1382,
+  "transcript_lines_at_start": 1382,
+  "token_usage": {
+    "input_tokens": 450799,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 21406607,
+    "output_tokens": 87782,
+    "api_call_count": 142
+  },
+  "session_token_usage": {
+    "input_tokens": 2929127,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 106974234,
+    "output_tokens": 369099,
+    "api_call_count": 818
+  },
+  "redaction": {
+    "replacements": 49,
+    "layers": {
+      "betterleaks": 7,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 25,
+      "key_context": 19,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 9
+  }
+}
