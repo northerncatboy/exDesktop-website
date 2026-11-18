@@ -7,8 +7,8 @@ import { VisualPreview } from './components/VisualPreview';
 import { Features } from './components/Features';
 import { Installation } from './components/Installation';
 import { Roadmap } from './components/Roadmap';
-import { QuickFaq } from './components/QuickFaq';
-import { FullFaq } from './components/FullFaq';
+import { QuickWiki } from './components/QuickWiki';
+import { FullWiki } from './components/FullWiki';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
@@ -22,8 +22,16 @@ export const App: React.FC = () => {
     return 'dark';
   });
 
-  // Current route state
-  const [currentPath, setCurrentPath] = useState<string>(() => window.location.pathname);
+  // Current route state (normalize /faq to /wiki)
+  const [currentPath, setCurrentPath] = useState<string>(() => {
+    const path = window.location.pathname;
+    if (path.startsWith('/faq')) {
+      const newPath = path.replace(/^\/faq/, '/wiki');
+      window.history.replaceState(null, '', newPath + window.location.hash);
+      return newPath;
+    }
+    return path;
+  });
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
   // Sync theme with document root
@@ -35,7 +43,14 @@ export const App: React.FC = () => {
   // Handle back/forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPath(window.location.pathname);
+      const path = window.location.pathname;
+      if (path.startsWith('/faq')) {
+        const newPath = path.replace(/^\/faq/, '/wiki');
+        window.history.replaceState(null, '', newPath + window.location.hash);
+        setCurrentPath(newPath);
+      } else {
+        setCurrentPath(path);
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -43,7 +58,7 @@ export const App: React.FC = () => {
 
   // Update page title
   useEffect(() => {
-    if (currentPath.startsWith('/faq')) {
+    if (currentPath.startsWith('/wiki')) {
       document.title = 'WIKI — exDesktop';
     } else {
       document.title = 'exDesktop — кастомный клиент Telegram';
@@ -52,12 +67,13 @@ export const App: React.FC = () => {
 
   // Navigate helper
   const handleNavigate = (path: string) => {
-    const [targetPath, targetHash] = path.split('#');
+    const normalizedPath = path.startsWith('/faq') ? path.replace(/^\/faq/, '/wiki') : path;
+    const [targetPath, targetHash] = normalizedPath.split('#');
     const normalizedTarget = targetPath === '' ? '/' : targetPath;
     const isSamePage = normalizedTarget === currentPath;
 
     if (isSamePage && targetHash) {
-      window.history.pushState(null, '', path);
+      window.history.pushState(null, '', normalizedPath);
       const el = document.getElementById(targetHash);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
@@ -65,7 +81,7 @@ export const App: React.FC = () => {
       return;
     }
 
-    window.history.pushState(null, '', path);
+    window.history.pushState(null, '', normalizedPath);
     setCurrentPath(normalizedTarget);
 
     if (targetHash) {
@@ -84,7 +100,7 @@ export const App: React.FC = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  const isFaqPage = currentPath.startsWith('/faq');
+  const isWikiPage = currentPath.startsWith('/wiki');
 
   return (
     <div className="app-container">
@@ -102,8 +118,8 @@ export const App: React.FC = () => {
         onNavigate={handleNavigate}
       />
 
-      {isFaqPage ? (
-        <FullFaq onNavigate={handleNavigate} />
+      {isWikiPage ? (
+        <FullWiki onNavigate={handleNavigate} />
       ) : (
         <main>
           <Hero onNavigate={handleNavigate} />
@@ -111,7 +127,7 @@ export const App: React.FC = () => {
           <Features />
           <Installation />
           <Roadmap />
-          <QuickFaq onNavigate={handleNavigate} />
+          <QuickWiki onNavigate={handleNavigate} />
         </main>
       )}
 

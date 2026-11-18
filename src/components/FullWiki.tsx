@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from './Icon';
-import { FAQ_CATEGORIES, SITE_LINKS } from '../data/siteData';
+import { WIKI_CATEGORIES, SITE_LINKS } from '../data/siteData';
 import { asset } from '../utils/asset';
 
-interface FullFaqProps {
+interface FullWikiProps {
   onNavigate: (path: string) => void;
 }
 
-export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
-  const [activeCategory, setActiveCategory] = useState<string>(FAQ_CATEGORIES[0]?.anchor || 'форматы-плагинов');
+export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
+  const [activeCategory, setActiveCategory] = useState<string>(WIKI_CATEGORIES[0]?.anchor || 'форматы-плагинов');
   const [mobileTocOpen, setMobileTocOpen] = useState<boolean>(false);
   const isManualScroll = useRef<boolean>(false);
   const scrollTimeout = useRef<number | null>(null);
@@ -33,16 +33,16 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
       // Bottom boundary check: activate last category if user scrolled to bottom
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
-        setActiveCategory(FAQ_CATEGORIES[FAQ_CATEGORIES.length - 1].anchor);
+        setActiveCategory(WIKI_CATEGORIES[WIKI_CATEGORIES.length - 1].anchor);
         return;
       }
 
       // 180px offset below sticky header
       const headerOffset = 180;
-      let currentActive = FAQ_CATEGORIES[0].anchor;
+      let currentActive = WIKI_CATEGORIES[0].anchor;
 
-      for (let i = 0; i < FAQ_CATEGORIES.length; i++) {
-        const cat = FAQ_CATEGORIES[i];
+      for (let i = 0; i < WIKI_CATEGORIES.length; i++) {
+        const cat = WIKI_CATEGORIES[i];
         const el = document.getElementById(cat.anchor);
         if (!el) continue;
 
@@ -101,7 +101,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
     e.preventDefault();
     setActiveCategory(anchor);
     setMobileTocOpen(false);
-    window.history.pushState(null, '', `/faq#${anchor}`);
+    window.history.pushState(null, '', `/wiki#${anchor}`);
 
     isManualScroll.current = true;
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
@@ -116,9 +116,9 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="full-faq-page">
+    <div className="full-wiki-page">
       {/* Heading Zone */}
-      <section className="faq-heading-zone">
+      <section className="wiki-heading-zone">
         <div className="heading-left">
           <a
             href="/"
@@ -132,12 +132,12 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
             <span>На главную</span>
           </a>
 
-          <div className="faq-eyebrow">ДОКУМЕНТАЦИЯ / WIKI</div>
-          <h1 className="faq-page-title">SDK плагинов exDesktop</h1>
-          <p className="faq-lead-desc">
+          <div className="wiki-eyebrow">ДОКУМЕНТАЦИЯ / WIKI</div>
+          <h1 className="wiki-page-title">SDK плагинов exDesktop</h1>
+          <p className="wiki-lead-desc">
             exDesktop запускает плагины exteraGram на компьютере. Совместимость с SDK 1.4.6.2, эмуляция Android, хуки, защита и особенности ПК.
           </p>
-          <div className="faq-version-note">Описание соответствует exDesktop 7.4.3.2.</div>
+          <div className="wiki-version-note">Описание соответствует exDesktop 7.4.3.2.</div>
         </div>
 
         <div className="heading-right-emblem" aria-hidden="true">
@@ -146,26 +146,26 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
       </section>
 
       {/* Articles & TOC Layout */}
-      <div className="faq-main-layout">
+      <div className="wiki-main-layout">
         {/* Left Side: Table of Contents & Community Hint */}
-        <aside className="faq-sidebar" ref={sidebarRef}>
-          <div className="faq-toc-card">
+        <aside className="wiki-sidebar" ref={sidebarRef}>
+          <div className="wiki-toc-card">
             <button
               type="button"
               className="toc-header-toggle"
               onClick={() => setMobileTocOpen(!mobileTocOpen)}
               aria-expanded={mobileTocOpen}
             >
-              <span className="toc-title">РАЗДЕЛЫ WIKI ({FAQ_CATEGORIES.length})</span>
+              <span className="toc-title">РАЗДЕЛЫ WIKI ({WIKI_CATEGORIES.length})</span>
               <span className={`toc-toggle-indicator ${mobileTocOpen ? 'open' : ''}`} aria-hidden="true">
                 <Icon name="arrow_down" size={20} color="var(--text-primary)" />
               </span>
             </button>
             <nav className={`toc-list ${mobileTocOpen ? 'mobile-open' : ''}`} aria-label="Оглавление WIKI">
-              {FAQ_CATEGORIES.map((cat) => (
+              {WIKI_CATEGORIES.map((cat) => (
                 <a
                   key={cat.id}
-                  href={`/faq#${cat.anchor}`}
+                  href={`/wiki#${cat.anchor}`}
                   onClick={(e) => handleCategoryClick(e, cat.anchor)}
                   className={`toc-item ${activeCategory === cat.anchor ? 'active' : ''}`}
                 >
@@ -192,12 +192,12 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         </aside>
 
         {/* Right Side: Articles */}
-        <main className="faq-articles-content">
-          {FAQ_CATEGORIES.map((category) => (
+        <main className="wiki-articles-content">
+          {WIKI_CATEGORIES.map((category) => (
             <article
               key={category.id}
               id={category.anchor}
-              className="faq-article-section"
+              className="wiki-article-section"
             >
               <div className="article-header">
                 <span className="section-number">{category.number}</span>
@@ -228,7 +228,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
                     {item.table && (
                       <div className="table-container">
-                        <table className="faq-doc-table">
+                        <table className="wiki-doc-table">
                           {item.table.headers && (
                             <thead>
                               <tr>
@@ -259,13 +259,13 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
       </div>
 
       <style>{`
-        .full-faq-page {
+        .full-wiki-page {
           width: 100%;
           margin-top: 24px;
         }
 
         /* Heading Zone */
-        .faq-heading-zone {
+        .wiki-heading-zone {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -298,7 +298,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           transform: translateX(-2px);
         }
 
-        .faq-eyebrow {
+        .wiki-eyebrow {
           font-size: 13px;
           font-weight: 600;
           letter-spacing: 0.08em;
@@ -306,7 +306,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           margin-bottom: 12px;
         }
 
-        .faq-page-title {
+        .wiki-page-title {
           font-size: 70px;
           font-weight: 600;
           line-height: 78.4px;
@@ -315,7 +315,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           margin-bottom: 8px;
         }
 
-        .faq-lead-desc {
+        .wiki-lead-desc {
           font-size: 17px;
           line-height: 1.6;
           color: var(--text-secondary);
@@ -323,7 +323,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           max-width: 780px;
         }
 
-        .faq-version-note {
+        .wiki-version-note {
           display: inline-block;
           margin-top: 14px;
           padding: 8px 14px;
@@ -342,7 +342,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         }
 
         /* Main Layout */
-        .faq-main-layout {
+        .wiki-main-layout {
           display: grid;
           grid-template-columns: 340px 1fr;
           gap: 28px;
@@ -351,7 +351,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         }
 
         /* Sidebar */
-        .faq-sidebar {
+        .wiki-sidebar {
           display: flex;
           flex-direction: column;
           gap: 16px;
@@ -362,16 +362,16 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           padding-right: 6px;
         }
 
-        .faq-sidebar::-webkit-scrollbar {
+        .wiki-sidebar::-webkit-scrollbar {
           width: 6px;
         }
 
-        .faq-sidebar::-webkit-scrollbar-thumb {
+        .wiki-sidebar::-webkit-scrollbar-thumb {
           background-color: rgba(255, 255, 255, 0.15);
           border-radius: 3px;
         }
 
-        .faq-toc-card {
+        .wiki-toc-card {
           background-color: var(--surface-soft);
           border-radius: 28px;
           padding: 20px 12px;
@@ -483,13 +483,13 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         }
 
         /* Articles */
-        .faq-articles-content {
+        .wiki-articles-content {
           display: flex;
           flex-direction: column;
           gap: 24px;
         }
 
-        .faq-article-section {
+        .wiki-article-section {
           background-color: var(--surface-card);
           border-radius: 28px;
           padding: 32px 32px;
@@ -585,14 +585,14 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           background-color: var(--surface-soft);
         }
 
-        .faq-doc-table {
+        .wiki-doc-table {
           width: 100%;
           border-collapse: collapse;
           font-size: 14.5px;
           text-align: left;
         }
 
-        .faq-doc-table th {
+        .wiki-doc-table th {
           background-color: var(--surface-raised);
           padding: 12px 18px;
           font-weight: 600;
@@ -601,7 +601,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           white-space: nowrap;
         }
 
-        .faq-doc-table td {
+        .wiki-doc-table td {
           padding: 14px 18px;
           color: var(--text-secondary);
           border-bottom: 1px solid var(--divider);
@@ -609,17 +609,17 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           line-height: 1.5;
         }
 
-        .faq-doc-table tr:last-child td {
+        .wiki-doc-table tr:last-child td {
           border-bottom: none;
         }
 
         /* Responsive */
         @media (max-width: 1199px) {
-          .faq-main-layout {
+          .wiki-main-layout {
             grid-template-columns: 1fr;
             gap: 20px;
           }
-          .faq-sidebar {
+          .wiki-sidebar {
             position: static;
             max-height: none;
             overflow-y: visible;
@@ -643,7 +643,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           .toc-list.mobile-open {
             display: flex;
           }
-          .faq-heading-zone {
+          .wiki-heading-zone {
             flex-direction: column;
             align-items: flex-start;
             min-height: auto;
@@ -655,11 +655,11 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         }
 
         @media (max-width: 767px) {
-          .faq-page-title {
+          .wiki-page-title {
             font-size: clamp(32px, 8.5vw, 44px);
             line-height: 1.15;
           }
-          .faq-article-section {
+          .wiki-article-section {
             padding: 22px 16px;
             border-radius: 20px;
           }
@@ -688,8 +688,8 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
             padding-left: 18px;
             font-size: 14.5px;
           }
-          .faq-doc-table th,
-          .faq-doc-table td {
+          .wiki-doc-table th,
+          .wiki-doc-table td {
             padding: 10px 12px;
             font-size: 13px;
           }

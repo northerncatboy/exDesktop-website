@@ -1,11 +1,10 @@
-import { FaqCategory, FeatureItem, RoadmapColumn, RoadmapStage } from '../types';
+import { FeatureItem, RoadmapColumn, RoadmapStage, WikiCategory } from '../types';
 
 export const SITE_LINKS = {
   home: '/',
-  faq: '/faq',
-  wiki: '/faq',
-  faqInstallation: '/faq#windows-linux-и-macos',
-  faqCommunity: '/faq#форматы-плагинов',
+  wiki: '/wiki',
+  wikiInstallation: '/wiki#windows-linux-и-macos',
+  wikiCommunity: '/wiki#форматы-плагинов',
   download: 'https://github.com/metawka/exDesktop/releases/latest',
   github: 'https://github.com/metawka/exDesktop',
   telegram: 'https://t.me/exDesktop',
@@ -178,7 +177,7 @@ export const ROADMAP_STAGES: RoadmapStage[] = [
   }
 ];
 
-export const FAQ_CATEGORIES: FaqCategory[] = [
+export const WIKI_CATEGORIES: WikiCategory[] = [
   {
     "id": "wiki-cat-01",
     "number": "01",

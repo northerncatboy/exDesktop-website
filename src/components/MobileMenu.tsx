@@ -105,8 +105,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             Roadmap
           </a>
           <a
-            href="/faq"
-            onClick={(e) => handleItemClick(e, '/faq')}
+            href="/wiki"
+            onClick={(e) => handleItemClick(e, '/wiki')}
             className="menu-item"
           >
             WIKI

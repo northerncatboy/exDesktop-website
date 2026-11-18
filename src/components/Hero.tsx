@@ -69,10 +69,10 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           </a>
 
           <a
-            href="/faq"
+            href="/wiki"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('/faq');
+              onNavigate('/wiki');
             }}
             className="pill-button secondary hero-learn-btn"
           >

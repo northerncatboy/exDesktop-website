@@ -2,18 +2,18 @@ import React from 'react';
 import { Icon } from './Icon';
 import { SITE_LINKS } from '../data/siteData';
 
-interface QuickFaqProps {
+interface QuickWikiProps {
   onNavigate: (path: string) => void;
 }
 
-export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
+export const QuickWiki: React.FC<QuickWikiProps> = ({ onNavigate }) => {
   return (
-    <section className="quick-faq-section" id="faq">
-      <div className="quick-faq-grid">
-        {/* Left Column: FAQ Introduction */}
-        <div className="faq-intro-card">
+    <section className="quick-wiki-section" id="wiki">
+      <div className="quick-wiki-grid">
+        {/* Left Column: WIKI Introduction */}
+        <div className="wiki-intro-card">
           <div className="intro-top">
-            <div className="faq-icon-emblem">
+            <div className="wiki-icon-emblem">
               <Icon name="help" size={40} color="var(--accent-primary)" />
             </div>
             <h2 className="intro-headline">
@@ -25,9 +25,9 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
             href={SITE_LINKS.wiki}
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('/faq');
+              onNavigate('/wiki');
             }}
-            className="full-faq-btn"
+            className="full-wiki-btn"
           >
             <span>Открыть WIKI</span>
             <Icon name="arrow_right" size={22} color="currentColor" />
@@ -35,12 +35,12 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
         </div>
 
         {/* Right Column: Q&A List */}
-        <div className="faq-list-col">
+        <div className="wiki-list-col">
           {/* Question 1: Expanded by default */}
-          <div className="faq-expanded-card">
-            <div className="faq-card-header">
+          <div className="wiki-expanded-card">
+            <div className="wiki-card-header">
               <h3 className="question-title">Форматы плагинов и совместимость</h3>
-              <div className="faq-chevron-down">
+              <div className="wiki-chevron-down">
                 <Icon name="arrow_down" size={24} color="var(--text-secondary)" />
               </div>
             </div>
@@ -54,47 +54,47 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          {/* Question 2: Link to /faq#что-работает-так-же-как-на-android */}
+          {/* Question 2: Link to /wiki#что-работает-так-же-как-на-android */}
           <a
-            href="/faq#что-работает-так-же-как-на-android"
+            href="/wiki#что-работает-так-же-как-на-android"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('/faq#что-работает-так-же-как-на-android');
+              onNavigate('/wiki#что-работает-так-же-как-на-android');
             }}
-            className="faq-link-row"
+            className="wiki-link-row"
           >
             <span className="question-row-title">Что работает так же, как на Android?</span>
-            <div className="faq-chevron-right">
+            <div className="wiki-chevron-right">
               <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
             </div>
           </a>
 
-          {/* Question 3: Link to /faq#эмуляция-java-и-android */}
+          {/* Question 3: Link to /wiki#эмуляция-java-и-android */}
           <a
-            href="/faq#эмуляция-java-и-android"
+            href="/wiki#эмуляция-java-и-android"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('/faq#эмуляция-java-и-android');
+              onNavigate('/wiki#эмуляция-java-и-android');
             }}
-            className="faq-link-row"
+            className="wiki-link-row"
           >
             <span className="question-row-title">Эмуляция Java, Android и Xposed-хуки</span>
-            <div className="faq-chevron-right">
+            <div className="wiki-chevron-right">
               <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
             </div>
           </a>
 
-          {/* Question 4: Link to /faq#защита */}
+          {/* Question 4: Link to /wiki#защита */}
           <a
-            href="/faq#защита"
+            href="/wiki#защита"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('/faq#защита');
+              onNavigate('/wiki#защита');
             }}
-            className="faq-link-row"
+            className="wiki-link-row"
           >
             <span className="question-row-title">Песочница, защита данных и PluginGuard</span>
-            <div className="faq-chevron-right">
+            <div className="wiki-chevron-right">
               <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
             </div>
           </a>
@@ -102,19 +102,19 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
       </div>
 
       <style>{`
-        .quick-faq-section {
+        .quick-wiki-section {
           margin-top: 64px;
           width: 100%;
         }
 
-        .quick-faq-grid {
+        .quick-wiki-grid {
           display: grid;
           grid-template-columns: 430fr 858fr;
           gap: 24px;
         }
 
         /* Intro Card */
-        .faq-intro-card {
+        .wiki-intro-card {
           background-color: var(--surface-card);
           border-radius: 32px;
           padding: 32px 24px;
@@ -125,7 +125,7 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           min-width: 0;
         }
 
-        .faq-icon-emblem {
+        .wiki-icon-emblem {
           width: 64px;
           height: 64px;
           border-radius: 24px;
@@ -144,7 +144,7 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           color: var(--text-primary);
         }
 
-        .full-faq-btn {
+        .full-wiki-btn {
           height: 60px;
           border-radius: 30px;
           background-color: var(--accent-primary);
@@ -159,27 +159,27 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           transition: transform 150ms ease, opacity 150ms ease;
         }
 
-        .full-faq-btn:hover {
+        .full-wiki-btn:hover {
           transform: translateY(-2px);
           opacity: 0.95;
         }
 
         /* Right Column */
-        .faq-list-col {
+        .wiki-list-col {
           display: flex;
           flex-direction: column;
           gap: 16px;
           min-width: 0;
         }
 
-        .faq-expanded-card {
+        .wiki-expanded-card {
           background-color: var(--surface-card);
           border-radius: 28px;
           padding: 28px;
           min-width: 0;
         }
 
-        .faq-card-header {
+        .wiki-card-header {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -199,7 +199,7 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           color: var(--text-secondary);
         }
 
-        .faq-link-row {
+        .wiki-link-row {
           background-color: var(--surface-card);
           border-radius: 24px;
           padding: 28px;
@@ -213,7 +213,7 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           gap: 16px;
         }
 
-        .faq-link-row:hover {
+        .wiki-link-row:hover {
           background-color: var(--surface-raised);
           transform: translateX(4px);
         }
@@ -225,27 +225,27 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
         }
 
         @media (max-width: 1199px) {
-          .quick-faq-grid {
+          .quick-wiki-grid {
             grid-template-columns: 1fr;
           }
-          .faq-intro-card {
+          .wiki-intro-card {
             min-height: auto;
             gap: 24px;
           }
         }
 
         @media (max-width: 767px) {
-          .quick-faq-section {
+          .quick-wiki-section {
             margin-top: 40px;
           }
-          .faq-intro-card {
+          .wiki-intro-card {
             border-radius: 28px;
             padding: 24px 20px;
           }
           .intro-headline {
             font-size: clamp(26px, 7vw, 32px);
           }
-          .full-faq-btn {
+          .full-wiki-btn {
             height: 52px;
             padding: 0 20px;
             font-size: 15px;
@@ -258,8 +258,8 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
             font-size: 15px;
             line-height: 1.5;
           }
-          .faq-expanded-card,
-          .faq-link-row {
+          .wiki-expanded-card,
+          .wiki-link-row {
             padding: 20px 18px;
             border-radius: 22px;
           }

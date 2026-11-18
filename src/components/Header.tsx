@@ -19,7 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenMobileMenu,
   onNavigate
 }) => {
-  const isFaq = currentPath.startsWith('/faq');
+  const isWiki = currentPath.startsWith('/wiki');
 
   const handleLinkClick = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -46,8 +46,8 @@ export const Header: React.FC<HeaderProps> = ({
         <a
           href="/"
           onClick={(e) => handleLinkClick(e, '/')}
-          className={`nav-pill ${!isFaq ? 'active' : ''}`}
-          aria-current={!isFaq ? 'page' : undefined}
+          className={`nav-pill ${!isWiki ? 'active' : ''}`}
+          aria-current={!isWiki ? 'page' : undefined}
         >
           Главная
         </a>
@@ -59,10 +59,10 @@ export const Header: React.FC<HeaderProps> = ({
           Установка
         </a>
         <a
-          href="/faq"
-          onClick={(e) => handleLinkClick(e, '/faq')}
-          className={`nav-pill ${isFaq ? 'active' : ''}`}
-          aria-current={isFaq ? 'page' : undefined}
+          href="/wiki"
+          onClick={(e) => handleLinkClick(e, '/wiki')}
+          className={`nav-pill ${isWiki ? 'active' : ''}`}
+          aria-current={isWiki ? 'page' : undefined}
         >
           WIKI
         </a>

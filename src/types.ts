@@ -1,11 +1,11 @@
 export type Theme = 'dark' | 'light';
 
-export interface FaqTable {
+export interface WikiTable {
   headers?: string[];
   rows: string[][];
 }
 
-export interface FaqItem {
+export interface WikiItem {
   id: string;
   question: string;
   answer?: string;
@@ -13,15 +13,15 @@ export interface FaqItem {
   source?: string;
   code?: string;
   bullets?: string[];
-  table?: FaqTable | null;
+  table?: WikiTable | null;
 }
 
-export interface FaqCategory {
+export interface WikiCategory {
   id: string;
   number: string;
   title: string;
   anchor: string;
-  items: FaqItem[];
+  items: WikiItem[];
 }
 
 export interface RoadmapItem {
