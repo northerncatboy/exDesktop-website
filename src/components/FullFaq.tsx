@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from './Icon';
 import { FAQ_CATEGORIES, SITE_LINKS } from '../data/siteData';
 
@@ -9,8 +9,12 @@ interface FullFaqProps {
 export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
   const [activeCategory, setActiveCategory] = useState<string>('start');
   const [mobileTocOpen, setMobileTocOpen] = useState<boolean>(false);
+  const isManualScroll = useRef<boolean>(false);
+  const scrollTimeout = useRef<number | null>(null);
+  const sidebarRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // Check initial hash
     const hash = window.location.hash.replace('#', '');
     if (hash) {
       setActiveCategory(hash);
@@ -19,13 +23,90 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         el.scrollIntoView({ behavior: 'smooth' });
       }
     }
+
+    // Scroll spy handler
+    let ticking = false;
+    const handleScroll = () => {
+      if (isManualScroll.current) return;
+
+      // Bottom boundary check: activate last category if user scrolled to bottom
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
+        setActiveCategory(FAQ_CATEGORIES[FAQ_CATEGORIES.length - 1].anchor);
+        return;
+      }
+
+      // 180px offset below sticky header
+      const headerOffset = 180;
+      let currentActive = FAQ_CATEGORIES[0].anchor;
+
+      for (let i = 0; i < FAQ_CATEGORIES.length; i++) {
+        const cat = FAQ_CATEGORIES[i];
+        const el = document.getElementById(cat.anchor);
+        if (!el) continue;
+
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= headerOffset) {
+          currentActive = cat.anchor;
+        } else {
+          break;
+        }
+      }
+
+      setActiveCategory(currentActive);
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (scrollTimeout.current) {
+        clearTimeout(scrollTimeout.current);
+      }
+    };
   }, []);
+
+  // Keep active TOC item visible inside sidebar when activeCategory changes
+  useEffect(() => {
+    if (!sidebarRef.current) return;
+    const sidebar = sidebarRef.current;
+    const activeItem = sidebar.querySelector<HTMLElement>('.toc-item.active');
+    if (activeItem) {
+      const sidebarRect = sidebar.getBoundingClientRect();
+      const itemRect = activeItem.getBoundingClientRect();
+
+      // Only scroll sidebar if active item is outside its visible boundaries
+      if (itemRect.top < sidebarRect.top + 20 || itemRect.bottom > sidebarRect.bottom - 20) {
+        sidebar.scrollTo({
+          top: activeItem.offsetTop - sidebar.offsetTop - (sidebar.clientHeight / 2) + (activeItem.clientHeight / 2),
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [activeCategory]);
 
   const handleCategoryClick = (e: React.MouseEvent, anchor: string) => {
     e.preventDefault();
     setActiveCategory(anchor);
     setMobileTocOpen(false);
     window.history.pushState(null, '', `/faq#${anchor}`);
+
+    isManualScroll.current = true;
+    if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
+    scrollTimeout.current = window.setTimeout(() => {
+      isManualScroll.current = false;
+    }, 800);
+
     const el = document.getElementById(anchor);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -61,7 +142,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
       {/* Articles & TOC Layout */}
       <div className="faq-main-layout">
         {/* Left Side: Table of Contents & Community Hint */}
-        <aside className="faq-sidebar">
+        <aside className="faq-sidebar" ref={sidebarRef}>
           <div className="faq-toc-card">
             <button
               type="button"
