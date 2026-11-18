@@ -1,11 +1,19 @@
 export type Theme = 'dark' | 'light';
 
+export interface FaqTable {
+  headers?: string[];
+  rows: string[][];
+}
+
 export interface FaqItem {
   id: string;
   question: string;
-  answer: string;
+  answer?: string;
   category: string;
   source?: string;
+  code?: string;
+  bullets?: string[];
+  table?: FaqTable;
 }
 
 export interface FaqCategory {

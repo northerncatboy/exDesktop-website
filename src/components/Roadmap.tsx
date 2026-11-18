@@ -7,7 +7,6 @@ export const Roadmap: React.FC = () => {
     <section className="roadmap-section" id="roadmap">
       <div className="section-header">
         <h2 className="section-title">Roadmap</h2>
-        <p className="section-subtitle">Открытое развитие. Без обещаний по датам.</p>
       </div>
 
       <div className="roadmap-grid">
@@ -45,10 +44,6 @@ export const Roadmap: React.FC = () => {
           </div>
         ))}
       </div>
-
-      <p className="roadmap-note">
-        Направления по README и открытым обсуждениям проекта. Сроки релизов не заявлены.
-      </p>
 
       <style>{`
         .roadmap-section {

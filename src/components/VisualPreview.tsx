@@ -6,7 +6,6 @@ export const VisualPreview: React.FC = () => {
     <section className="preview-section" id="preview">
       <div className="section-header">
         <h2 className="section-title">Посмотри, как это работает</h2>
-        <p className="section-subtitle">Настройки и оформление — реальные скриншоты exDesktop.</p>
       </div>
 
       <div className="preview-grid">

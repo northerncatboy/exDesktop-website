@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
     { label: 'Changelog', url: SITE_LINKS.changelog, icon: 'changelog' as const },
     { label: 'Contact', url: SITE_LINKS.contact, icon: 'mail' as const },
     { label: 'Github', url: SITE_LINKS.github, icon: 'github' as const },
-    { label: 'PythonSDK', url: SITE_LINKS.pythonSdk, icon: 'code' as const }
+    { label: 'PluginSDK', url: SITE_LINKS.pluginSdk, icon: 'code' as const }
   ];
 
   return (

@@ -10,7 +10,6 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
   const [activeCategory, setActiveCategory] = useState<string>('start');
 
   useEffect(() => {
-    // Check initial hash
     const hash = window.location.hash.replace('#', '');
     if (hash) {
       setActiveCategory(hash);
@@ -33,7 +32,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
   return (
     <div className="full-faq-page">
-      {/* 8.1 Heading Zone */}
+      {/* Heading Zone */}
       <section className="faq-heading-zone">
         <div className="heading-left">
           <a
@@ -50,7 +49,6 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
           <div className="faq-eyebrow">ПОМОЩЬ / FAQ</div>
           <h1 className="faq-page-title">Ответы. Без лишнего.</h1>
-          <p className="faq-page-subtitle">Всё о начале работы, установке и возможностях exDesktop.</p>
         </div>
 
         <div className="heading-right-emblem" aria-hidden="true">
@@ -58,7 +56,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* 8.2 Articles & TOC Layout */}
+      {/* Articles & TOC Layout */}
       <div className="faq-main-layout">
         {/* Left Side: Table of Contents & Community Hint */}
         <aside className="faq-sidebar">
@@ -111,7 +109,48 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
                 {category.items.map((item) => (
                   <div key={item.id} className="article-item">
                     <h3 className="item-question">{item.question}</h3>
-                    <p className="item-answer">{item.answer}</p>
+                    {item.answer && (
+                      <p className="item-answer">{item.answer}</p>
+                    )}
+
+                    {item.code && (
+                      <pre className="code-block">
+                        <code>{item.code}</code>
+                      </pre>
+                    )}
+
+                    {item.bullets && item.bullets.length > 0 && (
+                      <ul className="item-bullets">
+                        {item.bullets.map((b, idx) => (
+                          <li key={idx}>{b}</li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {item.table && (
+                      <div className="table-container">
+                        <table className="faq-doc-table">
+                          {item.table.headers && (
+                            <thead>
+                              <tr>
+                                {item.table.headers.map((h, idx) => (
+                                  <th key={idx}>{h}</th>
+                                ))}
+                              </tr>
+                            </thead>
+                          )}
+                          <tbody>
+                            {item.table.rows.map((row, rIdx) => (
+                              <tr key={rIdx}>
+                                {row.map((cell, cIdx) => (
+                                  <td key={cIdx}>{cell}</td>
+                                ))}
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -120,36 +159,18 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         </main>
       </div>
 
-      {/* 8.4 Support Block */}
-      <section className="faq-support-block">
-        <div className="support-text">
-          <h2 className="support-title">Хорошие проекты растут вместе.</h2>
-          <p className="support-desc">Приходи в сообщество: делись идеями, спрашивай и помогай другим.</p>
-        </div>
-
-        <a
-          href={SITE_LINKS.telegramChat}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="support-chat-btn"
-        >
-          <Icon name="chat" size={22} color="var(--text-on-accent)" />
-          <span>Telegram Chat</span>
-        </a>
-      </section>
-
       <style>{`
         .full-faq-page {
           width: 100%;
           margin-top: 24px;
         }
 
-        /* 8.1 Heading Zone */
+        /* Heading Zone */
         .faq-heading-zone {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          min-height: 252px;
+          min-height: 220px;
           padding: 16px 0 32px 0;
           position: relative;
         }
@@ -192,12 +213,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           line-height: 78.4px;
           letter-spacing: -0.02em;
           color: var(--text-primary);
-          margin-bottom: 16px;
-        }
-
-        .faq-page-subtitle {
-          font-size: 21px;
-          color: var(--text-secondary);
+          margin-bottom: 8px;
         }
 
         .heading-right-emblem {
@@ -206,12 +222,13 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           pointer-events: none;
         }
 
-        /* 8.2 Main Layout */
+        /* Main Layout */
         .faq-main-layout {
           display: grid;
-          grid-template-columns: 320px 1fr;
-          gap: 24px;
+          grid-template-columns: 340px 1fr;
+          gap: 28px;
           margin-top: 24px;
+          align-items: start;
         }
 
         /* Sidebar */
@@ -219,6 +236,20 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           display: flex;
           flex-direction: column;
           gap: 16px;
+          position: sticky;
+          top: 96px;
+          max-height: calc(100vh - 120px);
+          overflow-y: auto;
+          padding-right: 6px;
+        }
+
+        .faq-sidebar::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .faq-sidebar::-webkit-scrollbar-thumb {
+          background-color: rgba(255, 255, 255, 0.15);
+          border-radius: 3px;
         }
 
         .faq-toc-card {
@@ -240,18 +271,19 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         .toc-list {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 4px;
         }
 
         .toc-item {
           display: flex;
           align-items: center;
-          gap: 14px;
-          height: 56px;
-          border-radius: 18px;
-          padding: 0 16px;
-          font-size: 16px;
+          gap: 12px;
+          min-height: 48px;
+          border-radius: 16px;
+          padding: 10px 14px;
+          font-size: 14.5px;
           font-weight: 500;
+          line-height: 1.35;
           color: var(--text-secondary);
           text-decoration: none;
           transition: background-color 150ms ease, color 150ms ease;
@@ -270,7 +302,13 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
         .toc-num {
           font-family: var(--font-mono);
-          font-size: 14px;
+          font-size: 13px;
+          opacity: 0.75;
+          flex-shrink: 0;
+        }
+
+        .toc-label {
+          flex: 1;
         }
 
         /* Community Hint */
@@ -302,8 +340,8 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         }
 
         .hint-body {
-          font-size: 17px;
-          line-height: 23.8px;
+          font-size: 16px;
+          line-height: 23px;
           color: var(--text-secondary);
         }
 
@@ -311,13 +349,13 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         .faq-articles-content {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 24px;
         }
 
         .faq-article-section {
           background-color: var(--surface-card);
           border-radius: 28px;
-          padding: 32px 28px;
+          padding: 32px 32px;
           scroll-margin-top: 32px;
         }
 
@@ -332,94 +370,121 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
         .section-number {
           font-family: var(--font-mono);
-          font-size: 22px;
+          font-size: 24px;
           font-weight: 600;
           color: var(--accent-primary);
         }
 
         .section-title {
-          font-size: 27px;
+          font-size: 28px;
           font-weight: 600;
-          line-height: 37.8px;
+          line-height: 1.3;
           color: var(--text-primary);
         }
 
         .questions-container {
           display: flex;
           flex-direction: column;
-          gap: 24px;
+          gap: 32px;
         }
 
         .article-item {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 12px;
         }
 
         .item-question {
-          font-size: 19px;
+          font-size: 20px;
           font-weight: 600;
-          line-height: 26px;
+          line-height: 28px;
           color: var(--text-primary);
         }
 
         .item-answer {
           font-size: 16px;
-          line-height: 24px;
+          line-height: 25px;
           color: var(--text-secondary);
+          white-space: pre-line;
         }
 
-        /* 8.4 Support Block */
-        .faq-support-block {
+        /* Code block */
+        .code-block {
           background-color: var(--surface-soft);
-          border-radius: 32px;
-          padding: 36px 40px;
-          margin-top: 48px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .support-title {
-          font-size: 30px;
-          font-weight: 600;
-          line-height: 42px;
+          border-radius: 16px;
+          padding: 16px 20px;
+          overflow-x: auto;
+          font-family: var(--font-mono);
+          font-size: 14px;
+          line-height: 1.5;
           color: var(--text-primary);
-          margin-bottom: 6px;
+          border: 1px solid var(--divider);
+          margin-top: 4px;
         }
 
-        .support-desc {
-          font-size: 18px;
-          line-height: 25.2px;
+        .code-block code {
+          font-family: inherit;
+        }
+
+        /* Bullet lists */
+        .item-bullets {
+          margin: 4px 0 0 0;
+          padding-left: 24px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
           color: var(--text-secondary);
+          font-size: 15.5px;
+          line-height: 1.55;
         }
 
-        .support-chat-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          width: 280px;
-          height: 58px;
-          border-radius: 29px;
-          background-color: var(--accent-primary);
-          color: var(--text-on-accent);
-          font-size: 16px;
+        /* Documentation tables */
+        .table-container {
+          width: 100%;
+          overflow-x: auto;
+          border-radius: 16px;
+          border: 1px solid var(--divider);
+          margin-top: 8px;
+          background-color: var(--surface-soft);
+        }
+
+        .faq-doc-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14.5px;
+          text-align: left;
+        }
+
+        .faq-doc-table th {
+          background-color: var(--surface-raised);
+          padding: 12px 18px;
           font-weight: 600;
-          text-decoration: none;
-          flex-shrink: 0;
-          transition: transform 150ms ease, opacity 150ms ease;
+          color: var(--text-primary);
+          border-bottom: 1px solid var(--divider);
+          white-space: nowrap;
         }
 
-        .support-chat-btn:hover {
-          transform: translateY(-2px);
-          opacity: 0.95;
+        .faq-doc-table td {
+          padding: 14px 18px;
+          color: var(--text-secondary);
+          border-bottom: 1px solid var(--divider);
+          vertical-align: top;
+          line-height: 1.5;
+        }
+
+        .faq-doc-table tr:last-child td {
+          border-bottom: none;
         }
 
         /* Responsive */
         @media (max-width: 1199px) {
           .faq-main-layout {
             grid-template-columns: 1fr;
+          }
+          .faq-sidebar {
+            position: static;
+            max-height: none;
+            overflow-y: visible;
           }
           .faq-heading-zone {
             flex-direction: column;
@@ -428,14 +493,6 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           .heading-right-emblem {
             display: none;
           }
-          .faq-support-block {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 24px;
-          }
-          .support-chat-btn {
-            width: 100%;
-          }
         }
 
         @media (max-width: 767px) {
@@ -443,31 +500,27 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
             font-size: 44px;
             line-height: 1.15;
           }
-          .faq-page-subtitle {
-            font-size: 17px;
-          }
           .faq-article-section {
-            padding: 20px;
+            padding: 22px 18px;
             border-radius: 20px;
           }
           .section-title {
             font-size: 22px;
           }
           .item-question {
-            font-size: 17px;
+            font-size: 18px;
           }
           .item-answer {
             font-size: 15px;
           }
-          .support-title {
-            font-size: 24px;
-            line-height: 1.3;
+          .code-block {
+            padding: 12px 14px;
+            font-size: 13px;
           }
-          .support-desc {
-            font-size: 15px;
-          }
-          .faq-support-block {
-            padding: 24px 20px;
+          .faq-doc-table th,
+          .faq-doc-table td {
+            padding: 10px 12px;
+            font-size: 13.5px;
           }
         }
       `}</style>
