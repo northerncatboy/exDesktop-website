@@ -147,6 +147,8 @@ export const Installation: React.FC = () => {
           align-items: center;
           justify-content: space-between;
           margin-bottom: 8px;
+          flex-wrap: wrap;
+          gap: 8px;
         }
 
         .terminal-label {
@@ -174,6 +176,7 @@ export const Installation: React.FC = () => {
           line-height: 1.6;
           color: var(--terminal-command);
           overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
           white-space: pre;
           margin: 0;
         }
@@ -282,16 +285,39 @@ export const Installation: React.FC = () => {
           }
           .install-card,
           .repository-card {
-            border-radius: 24px;
-            padding: 24px 20px;
+            border-radius: 22px;
+            padding: 22px 18px;
+            min-height: auto;
           }
           .install-title {
             font-size: 24px;
-            line-height: 1.3;
+            line-height: 1.25;
+          }
+          .install-subtitle {
+            font-size: 15px;
+          }
+          .terminal-box {
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin: 16px 0 14px 0;
+          }
+          .terminal-label {
+            font-size: 11px;
+          }
+          .terminal-code {
+            font-size: 12.5px;
+            padding-bottom: 4px;
+          }
+          .windows-link {
+            font-size: 13.5px;
           }
           .repo-title {
-            font-size: 24px;
+            font-size: 22px;
             line-height: 1.25;
+          }
+          .repo-desc {
+            font-size: 15px;
+            line-height: 1.45;
           }
         }
       `}</style>

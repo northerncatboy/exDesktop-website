@@ -109,21 +109,22 @@ export const Footer: React.FC = () => {
         @media (max-width: 767px) {
           .site-footer {
             margin-top: 40px;
-            padding: 24px 20px 24px 20px;
-            border-radius: 24px;
+            padding: 22px 18px;
+            border-radius: 22px;
           }
           .footer-title {
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 22px;
+            margin-bottom: 16px;
           }
           .footer-links-row {
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 8px;
           }
           .footer-pill-btn {
-            font-size: 14px;
-            height: 48px;
-            padding: 0 12px;
+            font-size: 13.5px;
+            height: 46px;
+            padding: 0 10px;
+            gap: 8px;
             min-width: 0;
             white-space: nowrap;
           }
@@ -134,7 +135,7 @@ export const Footer: React.FC = () => {
           }
         }
 
-        @media (max-width: 400px) {
+        @media (max-width: 420px) {
           .footer-links-row {
             grid-template-columns: 1fr;
           }

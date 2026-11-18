@@ -318,6 +318,12 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             padding: 28px 16px;
             margin-top: 16px;
           }
+          .version-badge {
+            font-size: 12px;
+            padding: 6px 12px;
+            margin-bottom: 16px;
+            max-width: 100%;
+          }
           .hero-title {
             font-size: clamp(38px, 11vw, 54px);
             word-break: break-word;

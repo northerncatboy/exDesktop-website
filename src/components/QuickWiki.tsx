@@ -239,29 +239,33 @@ export const QuickWiki: React.FC<QuickWikiProps> = ({ onNavigate }) => {
             margin-top: 40px;
           }
           .wiki-intro-card {
-            border-radius: 28px;
-            padding: 24px 20px;
+            border-radius: 22px;
+            padding: 22px 18px;
           }
           .intro-headline {
-            font-size: clamp(26px, 7vw, 32px);
+            font-size: clamp(24px, 6.5vw, 30px);
+            line-height: 1.2;
           }
           .full-wiki-btn {
-            height: 52px;
-            padding: 0 20px;
+            height: 48px;
+            border-radius: 24px;
+            padding: 0 18px;
             font-size: 15px;
           }
           .question-title,
           .question-row-title {
-            font-size: 17px;
+            font-size: 16px;
+            line-height: 1.35;
           }
           .answer-content {
-            font-size: 15px;
+            font-size: 14.5px;
             line-height: 1.5;
           }
           .wiki-expanded-card,
           .wiki-link-row {
-            padding: 20px 18px;
-            border-radius: 22px;
+            padding: 18px 16px;
+            border-radius: 20px;
+            min-height: auto;
           }
         }
       `}</style>

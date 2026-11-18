@@ -144,16 +144,16 @@ export const VisualPreview: React.FC = () => {
             margin-top: 40px;
           }
           .section-title {
-            font-size: 26px;
+            font-size: 24px;
           }
-          .section-subtitle {
-            font-size: 16px;
-          }
-          .card-label {
-            font-size: 18px;
+          .preview-card {
+            border-radius: 22px;
           }
           .preview-card-footer {
-            padding: 16px 20px;
+            padding: 16px 18px;
+          }
+          .card-label {
+            font-size: 17px;
           }
         }
       `}</style>

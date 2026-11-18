@@ -174,11 +174,17 @@ export const Roadmap: React.FC = () => {
             margin-top: 40px;
           }
           .section-title {
-            font-size: 26px;
+            font-size: 24px;
           }
           .rm-col {
-            padding: 20px 18px 12px;
+            padding: 18px 16px 10px;
             border-radius: 20px;
+          }
+          .rm-item-title {
+            font-size: 14.5px;
+          }
+          .rm-item-text {
+            font-size: 13px;
           }
         }
       `}</style>

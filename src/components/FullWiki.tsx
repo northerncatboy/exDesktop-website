@@ -180,7 +180,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
             href={SITE_LINKS.telegramChat}
             target="_blank"
             rel="noopener noreferrer"
-            className="community-hint-card"
+            className="community-hint-card desktop-only"
             aria-label="Задать вопрос в Telegram Chat сообщества"
           >
             <div className="hint-icon">
@@ -207,7 +207,9 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
               <div className="questions-container">
                 {category.items.map((item) => (
                   <div key={item.id} className="article-item">
-                    <h3 className="item-question">{item.question}</h3>
+                    {item.question && item.question !== category.title && (
+                      <h3 className="item-question">{item.question}</h3>
+                    )}
                     {item.answer && (
                       <p className="item-answer">{item.answer}</p>
                     )}
@@ -255,6 +257,21 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
               </div>
             </article>
           ))}
+
+          {/* Mobile bottom hint: appears after reading the documentation */}
+          <a
+            href={SITE_LINKS.telegramChat}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="community-hint-card mobile-only"
+            aria-label="Задать вопрос в Telegram Chat сообщества"
+          >
+            <div className="hint-icon">
+              <Icon name="chat" size={28} color="var(--accent-primary)" />
+            </div>
+            <h3 className="hint-heading">Не нашёл ответ?</h3>
+            <p className="hint-body">Загляни в чат сообщества. Вместе разберёмся.</p>
+          </a>
         </main>
       </div>
 
@@ -262,6 +279,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
         .full-wiki-page {
           width: 100%;
           margin-top: 24px;
+          min-width: 0;
         }
 
         /* Heading Zone */
@@ -276,6 +294,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
 
         .heading-left {
           max-width: 850px;
+          min-width: 0;
         }
 
         .back-home-btn {
@@ -291,6 +310,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           font-weight: 500;
           margin-bottom: 24px;
           transition: background-color 150ms ease, transform 150ms ease;
+          border: 1px solid var(--border-subtle);
         }
 
         .back-home-btn:hover {
@@ -307,12 +327,13 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
         }
 
         .wiki-page-title {
-          font-size: 70px;
+          font-size: clamp(34px, 5.5vw, 68px);
           font-weight: 600;
-          line-height: 78.4px;
-          letter-spacing: -0.02em;
+          line-height: 1.15;
+          letter-spacing: -0.025em;
           color: var(--text-primary);
           margin-bottom: 8px;
+          word-break: break-word;
         }
 
         .wiki-lead-desc {
@@ -333,12 +354,14 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           font-size: 13.5px;
           color: var(--text-secondary);
           font-family: var(--font-mono);
+          word-break: break-word;
         }
 
         .heading-right-emblem {
           transform: rotate(8deg);
           user-select: none;
           pointer-events: none;
+          flex-shrink: 0;
         }
 
         /* Main Layout */
@@ -348,6 +371,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           gap: 28px;
           margin-top: 24px;
           align-items: start;
+          min-width: 0;
         }
 
         /* Sidebar */
@@ -360,6 +384,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           max-height: calc(100vh - 120px);
           overflow-y: auto;
           padding-right: 6px;
+          min-width: 0;
         }
 
         .wiki-sidebar::-webkit-scrollbar {
@@ -375,6 +400,8 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           background-color: var(--surface-soft);
           border-radius: 28px;
           padding: 20px 12px;
+          border: 1px solid var(--border-subtle);
+          min-width: 0;
         }
 
         .toc-header-toggle {
@@ -386,6 +413,14 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           margin-bottom: 12px;
           cursor: default;
           text-align: left;
+          background: none;
+          border: none;
+          font: inherit;
+          color: inherit;
+          outline: none;
+          appearance: none;
+          -webkit-appearance: none;
+          -webkit-tap-highlight-color: transparent;
         }
 
         .toc-title {
@@ -424,6 +459,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           color: var(--text-secondary);
           text-decoration: none;
           transition: background-color 150ms ease, color 150ms ease;
+          min-width: 0;
         }
 
         .toc-item:hover {
@@ -446,6 +482,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
 
         .toc-label {
           flex: 1;
+          word-break: break-word;
         }
 
         /* Community Hint */
@@ -456,12 +493,21 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           display: flex;
           flex-direction: column;
           text-decoration: none;
+          border: 1px solid var(--border-subtle);
           transition: transform 150ms ease, background-color 150ms ease;
         }
 
         .community-hint-card:hover {
           transform: translateY(-2px);
           background-color: var(--surface-raised);
+        }
+
+        .community-hint-card.desktop-only {
+          display: flex;
+        }
+
+        .community-hint-card.mobile-only {
+          display: none;
         }
 
         .hint-icon {
@@ -487,22 +533,25 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           display: flex;
           flex-direction: column;
           gap: 24px;
+          min-width: 0;
         }
 
         .wiki-article-section {
           background-color: var(--surface-card);
           border-radius: 28px;
           padding: 32px 32px;
-          scroll-margin-top: 32px;
+          scroll-margin-top: 84px;
+          border: 1px solid var(--border-subtle);
+          min-width: 0;
         }
 
         .article-header {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 16px;
           margin-bottom: 24px;
           padding-bottom: 16px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          border-bottom: 1px solid var(--border-subtle);
         }
 
         .section-number {
@@ -510,25 +559,32 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           font-size: 24px;
           font-weight: 600;
           color: var(--accent-primary);
+          line-height: 1.3;
+          flex-shrink: 0;
+          padding-top: 1px;
         }
 
         .section-title {
-          font-size: 28px;
+          font-size: 26px;
           font-weight: 600;
           line-height: 1.3;
           color: var(--text-primary);
+          word-break: break-word;
+          overflow-wrap: break-word;
         }
 
         .questions-container {
           display: flex;
           flex-direction: column;
-          gap: 32px;
+          gap: 24px;
+          min-width: 0;
         }
 
         .article-item {
           display: flex;
           flex-direction: column;
           gap: 12px;
+          min-width: 0;
         }
 
         .item-question {
@@ -536,6 +592,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           font-weight: 600;
           line-height: 28px;
           color: var(--text-primary);
+          word-break: break-word;
         }
 
         .item-answer {
@@ -543,6 +600,8 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           line-height: 25px;
           color: var(--text-secondary);
           white-space: pre-line;
+          word-break: break-word;
+          overflow-wrap: break-word;
         }
 
         /* Code block */
@@ -551,44 +610,58 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           border-radius: 16px;
           padding: 16px 20px;
           overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
           font-family: var(--font-mono);
-          font-size: 14px;
+          font-size: 13.5px;
           line-height: 1.5;
           color: var(--text-primary);
           border: 1px solid var(--divider);
           margin-top: 4px;
+          max-width: 100%;
+          box-sizing: border-box;
         }
 
         .code-block code {
           font-family: inherit;
+          white-space: pre;
         }
 
         /* Bullet lists */
         .item-bullets {
           margin: 4px 0 0 0;
-          padding-left: 24px;
+          padding-left: 22px;
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 10px;
           color: var(--text-secondary);
-          font-size: 15.5px;
+          font-size: 15px;
           line-height: 1.55;
+          min-width: 0;
+        }
+
+        .item-bullets li {
+          word-break: break-word;
+          overflow-wrap: break-word;
         }
 
         /* Documentation tables */
         .table-container {
           width: 100%;
+          max-width: 100%;
           overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
           border-radius: 16px;
           border: 1px solid var(--divider);
           margin-top: 8px;
           background-color: var(--surface-soft);
+          box-sizing: border-box;
         }
 
         .wiki-doc-table {
           width: 100%;
+          min-width: 520px;
           border-collapse: collapse;
-          font-size: 14.5px;
+          font-size: 14px;
           text-align: left;
         }
 
@@ -607,91 +680,179 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           border-bottom: 1px solid var(--divider);
           vertical-align: top;
           line-height: 1.5;
+          word-break: break-word;
         }
 
         .wiki-doc-table tr:last-child td {
           border-bottom: none;
         }
 
-        /* Responsive */
+        /* Responsive Breakpoints */
         @media (max-width: 1199px) {
           .wiki-main-layout {
             grid-template-columns: 1fr;
             gap: 20px;
           }
+
           .wiki-sidebar {
             position: static;
             max-height: none;
             overflow-y: visible;
             padding-right: 0;
           }
+
+          .wiki-toc-card {
+            padding: 12px 14px;
+            border-radius: 22px;
+          }
+
           .toc-header-toggle {
             cursor: pointer;
-            padding: 8px 12px;
+            padding: 10px 12px;
             margin-bottom: 0;
+            border-radius: 14px;
+            background-color: rgba(255, 255, 255, 0.03);
           }
+
+          .toc-title {
+            font-size: 13px;
+            color: var(--text-primary);
+          }
+
           .toc-toggle-indicator {
             display: flex;
             align-items: center;
           }
+
           .toc-list {
             display: none;
-            margin-top: 12px;
+            margin-top: 10px;
             max-height: 380px;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
           }
+
           .toc-list.mobile-open {
             display: flex;
           }
+
+          .community-hint-card.desktop-only {
+            display: none !important;
+          }
+
+          .community-hint-card.mobile-only {
+            display: flex !important;
+            margin-top: 8px;
+          }
+
           .wiki-heading-zone {
             flex-direction: column;
             align-items: flex-start;
             min-height: auto;
             padding: 12px 0 24px 0;
           }
+
           .heading-right-emblem {
             display: none;
           }
         }
 
         @media (max-width: 767px) {
-          .wiki-page-title {
-            font-size: clamp(32px, 8.5vw, 44px);
-            line-height: 1.15;
+          .full-wiki-page {
+            margin-top: 12px;
           }
-          .wiki-article-section {
-            padding: 22px 16px;
+
+          .wiki-heading-zone {
+            padding: 8px 0 20px 0;
+          }
+
+          .back-home-btn {
+            height: 40px;
+            padding: 0 16px;
+            font-size: 14px;
+            margin-bottom: 18px;
             border-radius: 20px;
           }
+
+          .wiki-page-title {
+            font-size: clamp(26px, 7.5vw, 36px);
+            line-height: 1.2;
+          }
+
+          .wiki-lead-desc {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-top: 10px;
+          }
+
+          .wiki-version-note {
+            font-size: 12px;
+            padding: 6px 12px;
+            margin-top: 10px;
+          }
+
+          .wiki-article-section {
+            padding: 20px 16px;
+            border-radius: 22px;
+            scroll-margin-top: 76px;
+          }
+
+          .article-header {
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+          }
+
           .section-number {
             font-size: 20px;
           }
+
           .section-title {
-            font-size: 21px;
-            line-height: 1.25;
+            font-size: 20px;
+            line-height: 1.3;
           }
+
           .item-question {
             font-size: 17px;
             line-height: 1.35;
           }
+
           .item-answer {
-            font-size: 15px;
-            line-height: 1.5;
-            word-break: break-word;
-            overflow-wrap: break-word;
+            font-size: 14.5px;
+            line-height: 1.55;
           }
+
           .code-block {
             padding: 12px 14px;
-            font-size: 13px;
+            font-size: 12.5px;
+            border-radius: 12px;
           }
+
           .item-bullets {
             padding-left: 18px;
-            font-size: 14.5px;
+            font-size: 14px;
+            gap: 8px;
           }
+
           .wiki-doc-table th,
           .wiki-doc-table td {
             padding: 10px 12px;
-            font-size: 13px;
+            font-size: 12.5px;
+          }
+
+          .community-hint-card {
+            border-radius: 22px;
+            padding: 20px 18px;
+          }
+
+          .hint-heading {
+            font-size: 20px;
+            line-height: 1.3;
+          }
+
+          .hint-body {
+            font-size: 14.5px;
+            line-height: 1.45;
           }
         }
       `}</style>

@@ -103,13 +103,21 @@ export const Features: React.FC = () => {
           }
           .features-grid {
             grid-template-columns: 1fr;
-            gap: 16px;
+            gap: 14px;
+          }
+          .feature-card {
+            border-radius: 22px;
+            padding: 20px 18px;
+            min-height: auto;
           }
           .section-title {
-            font-size: 26px;
+            font-size: 24px;
           }
-          .section-subtitle {
-            font-size: 16px;
+          .feature-title {
+            font-size: 19px;
+          }
+          .feature-desc {
+            font-size: 15px;
           }
         }
       `}</style>

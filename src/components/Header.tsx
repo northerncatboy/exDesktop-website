@@ -264,12 +264,20 @@ export const Header: React.FC<HeaderProps> = ({
           .header-actions {
             gap: 8px;
           }
+          .theme-toggle-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+          }
           .desktop-nav,
           .desktop-github-btn {
             display: none;
           }
           .mobile-burger-btn {
             display: flex;
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
           }
         }
       `}</style>
