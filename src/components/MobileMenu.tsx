@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Icon } from './Icon';
+import { asset } from '../utils/asset';
 import { SITE_LINKS } from '../data/siteData';
 
 interface MobileMenuProps {
@@ -54,7 +55,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         {/* Top Header */}
         <div className="mobile-menu-header">
           <div className="menu-brand">
-            <img src="/assets/markSvg.svg" alt="" width={36} height={36} />
+            <img src={asset('assets/markSvg.svg')} alt="" width={36} height={36} />
             <span className="menu-brand-text">exDesktop</span>
           </div>
           <button

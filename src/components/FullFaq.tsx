@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from './Icon';
 import { FAQ_CATEGORIES, SITE_LINKS } from '../data/siteData';
+import { asset } from '../utils/asset';
 
 interface FullFaqProps {
   onNavigate: (path: string) => void;
@@ -135,7 +136,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         </div>
 
         <div className="heading-right-emblem" aria-hidden="true">
-          <img src="/assets/questionEmblemSvg.svg" alt="" width={148} height={148} />
+          <img src={asset('assets/questionEmblemSvg.svg')} alt="" width={148} height={148} />
         </div>
       </section>
 

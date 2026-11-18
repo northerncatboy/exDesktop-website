@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from './Icon';
+import { asset } from '../utils/asset';
 import { Theme } from '../types';
 import { SITE_LINKS } from '../data/siteData';
 
@@ -35,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
         aria-label="exDesktop Главная"
       >
         <div className="brand-mark">
-          <img src="/assets/markSvg.svg" alt="" width={44} height={44} />
+          <img src={asset('assets/markSvg.svg')} alt="" width={44} height={44} />
         </div>
         <span className="brand-text">exDesktop</span>
       </a>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon } from './Icon';
 import { SITE_LINKS } from '../data/siteData';
 import { useLatestRelease } from '../hooks/useLatestRelease';
+import { asset } from '../utils/asset';
 
 interface HeroProps {
   onNavigate: (path: string) => void;
@@ -26,10 +27,10 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
 
       {/* Decorative floral forms outside bounds */}
       <div className="hero-decor flower anim-flower" aria-hidden="true">
-        <img src="/assets/flowerSvg.svg" alt="" width={310} height={310} />
+        <img src={asset('assets/flowerSvg.svg')} alt="" width={310} height={310} />
       </div>
       <div className="hero-decor clover anim-clover" aria-hidden="true">
-        <img src="/assets/cloverSvg.svg" alt="" width={130} height={130} />
+        <img src={asset('assets/cloverSvg.svg')} alt="" width={130} height={130} />
       </div>
 
       {/* Left Column: Information and CTAs */}
@@ -89,14 +90,14 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         <div className="portrait-container">
           {/* Rotating Sunny Ring */}
           <div className="sunny-ring anim-sunny" aria-hidden="true">
-            <img src="/assets/sunnySvg.svg" alt="" width={348} height={348} />
+            <img src={asset('assets/sunnySvg.svg')} alt="" width={348} height={348} />
           </div>
 
           {/* Masked Static Avatar */}
           <div className="avatar-cookie-container">
             <div className="avatar-border-line">
               <img
-                src="/avatar.jpg"
+                src={asset('avatar.jpg')}
                 alt="Аватар METAWKA, разработчика exDesktop"
                 className="avatar-image"
                 width={304}

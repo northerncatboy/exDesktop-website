@@ -1,4 +1,5 @@
 import React from 'react';
+import { asset } from '../utils/asset';
 
 export type IconName =
   | 'sun'
@@ -41,8 +42,8 @@ export const Icon: React.FC<IconProps> = ({ name, size = 22, className = '', col
         minWidth: size,
         minHeight: size,
         backgroundColor: color,
-        WebkitMaskImage: `url(/assets/icons/${name}.svg)`,
-        maskImage: `url(/assets/icons/${name}.svg)`,
+        WebkitMaskImage: `url(${asset(`assets/icons/${name}.svg`)})`,
+        maskImage: `url(${asset(`assets/icons/${name}.svg`)})`,
         WebkitMaskRepeat: 'no-repeat',
         maskRepeat: 'no-repeat',
         WebkitMaskPosition: 'center',

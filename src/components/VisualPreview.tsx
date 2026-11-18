@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from './Icon';
+import { asset } from '../utils/asset';
 
 export const VisualPreview: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ export const VisualPreview: React.FC = () => {
       <div className="preview-grid">
         {/* Card 1: Settings */}
         <a
-          href="/screenshots/settings.webp"
+          href={asset('screenshots/settings.webp')}
           target="_blank"
           rel="noopener noreferrer"
           className="preview-card"
@@ -19,7 +20,7 @@ export const VisualPreview: React.FC = () => {
         >
           <div className="preview-image-wrapper">
             <img
-              src="/screenshots/settings.webp"
+              src={asset('screenshots/settings.webp')}
               alt="Скриншот настроек exDesktop"
               className="preview-image"
               loading="lazy"
@@ -33,7 +34,7 @@ export const VisualPreview: React.FC = () => {
 
         {/* Card 2: Appearance */}
         <a
-          href="/screenshots/appearance.webp"
+          href={asset('screenshots/appearance.webp')}
           target="_blank"
           rel="noopener noreferrer"
           className="preview-card"
@@ -41,7 +42,7 @@ export const VisualPreview: React.FC = () => {
         >
           <div className="preview-image-wrapper">
             <img
-              src="/screenshots/appearance.webp"
+              src={asset('screenshots/appearance.webp')}
               alt="Скриншот оформления exDesktop"
               className="preview-image"
               loading="lazy"
