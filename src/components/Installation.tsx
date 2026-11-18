@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Icon } from './Icon';
 import { INSTALL_COMMAND, INSTALL_COMMAND_SINGLE, SITE_LINKS } from '../data/siteData';
+import { useLatestRelease } from '../hooks/useLatestRelease';
 
 export const Installation: React.FC = () => {
   const [copied, setCopied] = useState(false);
+  const { version, releaseUrl } = useLatestRelease();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(INSTALL_COMMAND_SINGLE).then(() => {
@@ -41,12 +43,13 @@ export const Installation: React.FC = () => {
 
           <div className="windows-link-wrapper">
             <a
-              href={SITE_LINKS.download}
+              href={releaseUrl || SITE_LINKS.download}
               target="_blank"
               rel="noopener noreferrer"
               className="windows-link"
+              title={`Скачать установщик версии ${version} с GitHub Releases`}
             >
-              <span>На Windows? Скачай установщик со страницы релизов</span>
+              <span>На Windows? Скачай установщик ({version}) со страницы релизов</span>
               <Icon name="arrow_external" size={18} color="var(--accent-primary)" />
             </a>
           </div>

@@ -110,7 +110,7 @@ export const FAQ_CATEGORIES: FaqCategory[] = [
       {
         "id": "faq-supported-os",
         "question": "Какие операционные системы поддерживаются?",
-        "answer": "Поддерживаются Windows 10/11, современные дистрибутивы Linux (x86_64, ARM64) и macOS (Apple Silicon и Intel). Для Windows доступны установщик и portable-версия, для Linux — автоустановщик через curl, для macOS — dmg-образ.",
+        "answer": "Поддерживаются Windows 10/11, современные дистрибутивы Linux (x86_64, ARM64) и macOS (Apple Silicon и Intel). Актуальная стабильная версия — 7.4.3.2. Для Windows доступны установщик и portable-версия, для Linux — автоустановщик через curl, для macOS — dmg-образ.",
         "category": "Начало работы"
       }
     ]

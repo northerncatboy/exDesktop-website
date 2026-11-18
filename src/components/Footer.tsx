@@ -1,8 +1,11 @@
 import React from 'react';
 import { Icon } from './Icon';
 import { SITE_LINKS } from '../data/siteData';
+import { useLatestRelease } from '../hooks/useLatestRelease';
 
 export const Footer: React.FC = () => {
+  const { version } = useLatestRelease();
+
   const footerLinks = [
     { label: 'Telegram', url: SITE_LINKS.telegram, icon: 'telegram' as const },
     { label: 'Telegram Chat', url: SITE_LINKS.telegramChat, icon: 'chat' as const },
@@ -34,7 +37,7 @@ export const Footer: React.FC = () => {
       <div className="footer-divider" />
 
       <div className="footer-bottom-info">
-        <span className="copyright-text">© 2026 exDesktop · GPL-3.0</span>
+        <span className="copyright-text">© 2026 exDesktop {version ? `v${version} ` : ''}· GPL-3.0</span>
         <span className="disclaimer-text">Неофициальный проект. Не связан с Telegram FZ-LLC.</span>
       </div>
 
