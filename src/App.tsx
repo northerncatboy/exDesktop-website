@@ -119,7 +119,7 @@ export const App: React.FC = () => {
       />
 
       {isWikiPage ? (
-        <FullWiki onNavigate={handleNavigate} />
+        <FullWiki onNavigate={handleNavigate} currentPath={currentPath} />
       ) : (
         <main>
           <Hero onNavigate={handleNavigate} />

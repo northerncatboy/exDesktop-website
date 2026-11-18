@@ -1,48 +1,112 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from './Icon';
-import { WIKI_CATEGORIES, SITE_LINKS } from '../data/siteData';
+import { WIKI_SDK_CATEGORIES, WIKI_AI_CATEGORIES, SITE_LINKS, AI_PROMPT_TEXT } from '../data/siteData';
 import { asset } from '../utils/asset';
 
 interface FullWikiProps {
   onNavigate: (path: string) => void;
+  currentPath?: string;
 }
 
-export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
-  const [activeCategory, setActiveCategory] = useState<string>(WIKI_CATEGORIES[0]?.anchor || 'форматы-плагинов');
+export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate, currentPath }) => {
+  const [activeSection, setActiveSection] = useState<'sdk' | 'ai'>(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      const hash = window.location.hash.toLowerCase();
+      if (
+        path.includes('/ai') ||
+        hash.includes('ai') ||
+        hash.includes('install') ||
+        hash.includes('usage') ||
+        hash.includes('text')
+      ) {
+        return 'ai';
+      }
+    }
+    return 'sdk';
+  });
+
+  const currentCategories = activeSection === 'sdk' ? WIKI_SDK_CATEGORIES : WIKI_AI_CATEGORIES;
+  const [activeCategory, setActiveCategory] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const rawHash = window.location.hash.replace('#', '');
+      const hash = rawHash ? decodeURIComponent(rawHash) : '';
+      if (hash) return hash;
+    }
+    return activeSection === 'sdk' ? WIKI_SDK_CATEGORIES[0]?.anchor : WIKI_AI_CATEGORIES[0]?.anchor;
+  });
+
   const [mobileTocOpen, setMobileTocOpen] = useState<boolean>(false);
+  const [copiedPrompt, setCopiedPrompt] = useState<boolean>(false);
   const isManualScroll = useRef<boolean>(false);
   const scrollTimeout = useRef<number | null>(null);
   const sidebarRef = useRef<HTMLElement>(null);
 
+  // Sync with window hash / path on mount and on popstate
   useEffect(() => {
-    // Check initial hash
-    const rawHash = window.location.hash.replace('#', '');
-    const hash = rawHash ? decodeURIComponent(rawHash) : '';
-    if (hash) {
-      setActiveCategory(hash);
-      const el = document.getElementById(hash);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    const syncFromLocation = () => {
+      const path = window.location.pathname;
+      const rawHash = window.location.hash.replace('#', '');
+      const hash = rawHash ? decodeURIComponent(rawHash) : '';
 
-    // Scroll spy handler
+      const isAi =
+        path.includes('/ai') ||
+        hash.includes('ai') ||
+        hash === 'install' ||
+        hash === 'usage' ||
+        hash === 'text';
+
+      const sec = isAi ? 'ai' : 'sdk';
+      setActiveSection(sec);
+
+      const targetCategories = sec === 'sdk' ? WIKI_SDK_CATEGORIES : WIKI_AI_CATEGORIES;
+      const initialActive = hash || targetCategories[0]?.anchor;
+      setActiveCategory(initialActive);
+
+      if (hash) {
+        setTimeout(() => {
+          const el = document.getElementById(hash);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 60);
+      }
+    };
+
+    syncFromLocation();
+    window.addEventListener('popstate', syncFromLocation);
+    return () => window.removeEventListener('popstate', syncFromLocation);
+  }, []);
+
+  // Sync section if currentPath prop changes
+  useEffect(() => {
+    if (currentPath) {
+      const isAi = currentPath.includes('/ai');
+      const targetSec = isAi ? 'ai' : 'sdk';
+      setActiveSection(targetSec);
+    }
+  }, [currentPath]);
+
+  // Scroll spy handler for current section categories
+  useEffect(() => {
     let ticking = false;
     const handleScroll = () => {
       if (isManualScroll.current) return;
 
-      // Bottom boundary check: activate last category if user scrolled to bottom
+      const cats = activeSection === 'sdk' ? WIKI_SDK_CATEGORIES : WIKI_AI_CATEGORIES;
+      if (!cats.length) return;
+
+      // Bottom boundary check
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
-        setActiveCategory(WIKI_CATEGORIES[WIKI_CATEGORIES.length - 1].anchor);
+        setActiveCategory(cats[cats.length - 1].anchor);
         return;
       }
 
-      // 180px offset below sticky header
       const headerOffset = 180;
-      let currentActive = WIKI_CATEGORIES[0].anchor;
+      let currentActive = cats[0].anchor;
 
-      for (let i = 0; i < WIKI_CATEGORIES.length; i++) {
-        const cat = WIKI_CATEGORIES[i];
+      for (let i = 0; i < cats.length; i++) {
+        const cat = cats[i];
         const el = document.getElementById(cat.anchor);
         if (!el) continue;
 
@@ -76,7 +140,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
         clearTimeout(scrollTimeout.current);
       }
     };
-  }, []);
+  }, [activeSection]);
 
   // Keep active TOC item visible inside sidebar when activeCategory changes
   useEffect(() => {
@@ -87,21 +151,38 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
       const sidebarRect = sidebar.getBoundingClientRect();
       const itemRect = activeItem.getBoundingClientRect();
 
-      // Only scroll sidebar if active item is outside its visible boundaries
       if (itemRect.top < sidebarRect.top + 20 || itemRect.bottom > sidebarRect.bottom - 20) {
         sidebar.scrollTo({
-          top: activeItem.offsetTop - sidebar.offsetTop - (sidebar.clientHeight / 2) + (activeItem.clientHeight / 2),
+          top: activeItem.offsetTop - sidebar.offsetTop - sidebar.clientHeight / 2 + activeItem.clientHeight / 2,
           behavior: 'smooth'
         });
       }
     }
   }, [activeCategory]);
 
-  const handleCategoryClick = (e: React.MouseEvent, anchor: string) => {
+  const handleSectionSwitch = (sec: 'sdk' | 'ai') => {
+    if (activeSection === sec) return;
+    setActiveSection(sec);
+    setMobileTocOpen(false);
+    const targetCats = sec === 'sdk' ? WIKI_SDK_CATEGORIES : WIKI_AI_CATEGORIES;
+    const defaultAnchor = targetCats[0].anchor;
+    setActiveCategory(defaultAnchor);
+
+    const newUrl = sec === 'sdk' ? `/wiki#${defaultAnchor}` : `/wiki/ai#${defaultAnchor}`;
+    window.history.pushState(null, '', newUrl);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCategoryClick = (e: React.MouseEvent, sec: 'sdk' | 'ai', anchor: string) => {
     e.preventDefault();
+    if (activeSection !== sec) {
+      setActiveSection(sec);
+    }
     setActiveCategory(anchor);
     setMobileTocOpen(false);
-    window.history.pushState(null, '', `/wiki#${anchor}`);
+
+    const newUrl = sec === 'sdk' ? `/wiki#${anchor}` : `/wiki/ai#${anchor}`;
+    window.history.pushState(null, '', newUrl);
 
     isManualScroll.current = true;
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
@@ -115,29 +196,68 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
     }
   };
 
+  const handleCopyPrompt = () => {
+    navigator.clipboard.writeText(AI_PROMPT_TEXT).then(() => {
+      setCopiedPrompt(true);
+      setTimeout(() => setCopiedPrompt(false), 2000);
+    });
+  };
+
   return (
     <div className="full-wiki-page">
+      {/* Top Navigation & Section Tabs */}
+      <div className="wiki-top-nav">
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigate('/');
+          }}
+          className="back-home-btn"
+        >
+          <Icon name="arrow_left" size={20} color="var(--text-primary)" />
+          <span>На главную</span>
+        </a>
+
+        {/* Major Section Switcher */}
+        <div className="wiki-section-switch" role="tablist" aria-label="Разделы документации WIKI">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeSection === 'sdk'}
+            className={`section-tab-pill ${activeSection === 'sdk' ? 'active' : ''}`}
+            onClick={() => handleSectionSwitch('sdk')}
+          >
+            <Icon name="code" size={18} color="currentColor" />
+            <span>SDK плагинов exDesktop</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeSection === 'ai'}
+            className={`section-tab-pill ${activeSection === 'ai' ? 'active' : ''}`}
+            onClick={() => handleSectionSwitch('ai')}
+          >
+            <Icon name="tune" size={18} color="currentColor" />
+            <span>Скилл и промпт для ИИ</span>
+          </button>
+        </div>
+      </div>
+
       {/* Heading Zone */}
       <section className="wiki-heading-zone">
         <div className="heading-left">
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              onNavigate('/');
-            }}
-            className="back-home-btn"
-          >
-            <Icon name="arrow_left" size={20} color="var(--text-primary)" />
-            <span>На главную</span>
-          </a>
-
-          <div className="wiki-eyebrow">ДОКУМЕНТАЦИЯ / WIKI</div>
-          <h1 className="wiki-page-title">SDK плагинов exDesktop</h1>
-          <p className="wiki-lead-desc">
-            exDesktop запускает плагины exteraGram на компьютере. Совместимость с SDK 1.4.6.2, эмуляция Android, хуки, защита и особенности ПК.
-          </p>
-          <div className="wiki-version-note">Описание соответствует exDesktop 7.4.3.2.</div>
+          <div className="wiki-eyebrow">
+            {activeSection === 'sdk' ? 'РАЗДЕЛ WIKI / SDK' : 'РАЗДЕЛ WIKI / ИНСТРУМЕНТЫ ДЛЯ ИИ'}
+          </div>
+          <h1 className="wiki-page-title">
+            {activeSection === 'sdk' ? 'SDK плагинов exDesktop' : 'Скилл и промпт для ИИ'}
+          </h1>
+          {activeSection === 'ai' && (
+            <p className="wiki-lead-desc">
+              Инструкция для языковых моделей, которые пишут плагины exDesktop или переносят на ПК плагины exteraGram. В ней описаны API, работающие перехваты Android, таблица замен и правила защиты.
+            </p>
+          )}
         </div>
 
         <div className="heading-right-emblem" aria-hidden="true">
@@ -156,24 +276,73 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
               onClick={() => setMobileTocOpen(!mobileTocOpen)}
               aria-expanded={mobileTocOpen}
             >
-              <span className="toc-title">РАЗДЕЛЫ WIKI ({WIKI_CATEGORIES.length})</span>
+              <span className="toc-title">
+                {activeSection === 'sdk'
+                  ? `SDK ПЛАГИНОВ (${WIKI_SDK_CATEGORIES.length})`
+                  : `СКИЛЛ И ПРОМПТ ДЛЯ ИИ (${WIKI_AI_CATEGORIES.length})`}
+              </span>
               <span className={`toc-toggle-indicator ${mobileTocOpen ? 'open' : ''}`} aria-hidden="true">
                 <Icon name="arrow_down" size={20} color="var(--text-primary)" />
               </span>
             </button>
-            <nav className={`toc-list ${mobileTocOpen ? 'mobile-open' : ''}`} aria-label="Оглавление WIKI">
-              {WIKI_CATEGORIES.map((cat) => (
-                <a
-                  key={cat.id}
-                  href={`/wiki#${cat.anchor}`}
-                  onClick={(e) => handleCategoryClick(e, cat.anchor)}
-                  className={`toc-item ${activeCategory === cat.anchor ? 'active' : ''}`}
+
+            <div className={`toc-groups-container ${mobileTocOpen ? 'mobile-open' : ''}`}>
+              {/* Group 1: SDK плагинов exDesktop */}
+              <div className="toc-group">
+                <button
+                  type="button"
+                  className={`toc-group-header ${activeSection === 'sdk' ? 'current-group' : ''}`}
+                  onClick={() => handleSectionSwitch('sdk')}
                 >
-                  <span className="toc-num">{cat.number}</span>
-                  <span className="toc-label">{cat.title}</span>
-                </a>
-              ))}
-            </nav>
+                  <span className="group-title-text">SDK плагинов</span>
+                  <span className="group-badge">{WIKI_SDK_CATEGORIES.length}</span>
+                </button>
+
+                {activeSection === 'sdk' && (
+                  <nav className="toc-list" aria-label="Оглавление SDK плагинов">
+                    {WIKI_SDK_CATEGORIES.map((cat) => (
+                      <a
+                        key={cat.id}
+                        href={`/wiki#${cat.anchor}`}
+                        onClick={(e) => handleCategoryClick(e, 'sdk', cat.anchor)}
+                        className={`toc-item ${activeCategory === cat.anchor ? 'active' : ''}`}
+                      >
+                        <span className="toc-num">{cat.number}</span>
+                        <span className="toc-label">{cat.title}</span>
+                      </a>
+                    ))}
+                  </nav>
+                )}
+              </div>
+
+              {/* Group 2: Скилл и промпт для ИИ */}
+              <div className="toc-group">
+                <button
+                  type="button"
+                  className={`toc-group-header ${activeSection === 'ai' ? 'current-group' : ''}`}
+                  onClick={() => handleSectionSwitch('ai')}
+                >
+                  <span className="group-title-text">Скилл и промпт для ИИ</span>
+                  <span className="group-badge">{WIKI_AI_CATEGORIES.length}</span>
+                </button>
+
+                {activeSection === 'ai' && (
+                  <nav className="toc-list" aria-label="Оглавление инструментов для ИИ">
+                    {WIKI_AI_CATEGORIES.map((cat) => (
+                      <a
+                        key={cat.id}
+                        href={`/wiki/ai#${cat.anchor}`}
+                        onClick={(e) => handleCategoryClick(e, 'ai', cat.anchor)}
+                        className={`toc-item ${activeCategory === cat.anchor ? 'active' : ''}`}
+                      >
+                        <span className="toc-num">{cat.number}</span>
+                        <span className="toc-label">{cat.title}</span>
+                      </a>
+                    ))}
+                  </nav>
+                )}
+              </div>
+            </div>
           </div>
 
           <a
@@ -193,7 +362,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
 
         {/* Right Side: Articles */}
         <main className="wiki-articles-content">
-          {WIKI_CATEGORIES.map((category) => (
+          {currentCategories.map((category) => (
             <article
               key={category.id}
               id={category.anchor}
@@ -203,6 +372,80 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
                 <span className="section-number">{category.number}</span>
                 <h2 className="section-title">{category.title}</h2>
               </div>
+
+              {/* Special interactive card block for AI Tools overview */}
+              {activeSection === 'ai' && category.anchor === 'ai-tools' && (
+                <div className="ai-tools-cards-grid">
+                  <div className="ai-card">
+                    <div className="ai-card-header">
+                      <div className="ai-card-icon">
+                        <Icon name="code" size={24} color="var(--accent-primary)" />
+                      </div>
+                      <h3 className="ai-card-title">Скилл для Claude Code</h3>
+                    </div>
+                    <p className="ai-card-desc">
+                      Файл <code>SKILL.md</code> помещается в папку <code>~/.claude/skills/exdesktop-plugins/</code>. Claude применяет его сам, когда речь идёт о плагинах exDesktop.
+                    </p>
+                    <div className="ai-card-actions">
+                      <a
+                        href={asset('docs/ai/exdesktop-plugins/SKILL.md')}
+                        download="SKILL.md"
+                        className="pill-button primary ai-btn"
+                      >
+                        <Icon name="download" size={18} color="var(--text-on-accent)" />
+                        <span>Скачать SKILL.md</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="ai-card">
+                    <div className="ai-card-header">
+                      <div className="ai-card-icon">
+                        <Icon name="chat" size={24} color="var(--accent-primary)" />
+                      </div>
+                      <h3 className="ai-card-title">Промпт для чата</h3>
+                    </div>
+                    <p className="ai-card-desc">
+                      Тот же текст без служебного заголовка. Вставляется первым сообщением или в системный промпт ChatGPT, Gemini, DeepSeek и локальных моделей, следом отправляется исходный код плагина.
+                    </p>
+                    <div className="ai-card-actions">
+                      <button
+                        type="button"
+                        className="pill-button primary ai-btn"
+                        onClick={handleCopyPrompt}
+                      >
+                        <Icon name={copiedPrompt ? 'check' : 'terminal'} size={18} color="var(--text-on-accent)" />
+                        <span>{copiedPrompt ? 'Скопировано!' : 'Скопировать промпт'}</span>
+                      </button>
+                      <a
+                        href={asset('docs/ai/prompt.md')}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="pill-button secondary ai-btn"
+                      >
+                        <span>Открыть файл</span>
+                        <Icon name="arrow_external" size={16} color="currentColor" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Special copy bar for Prompt text */}
+              {activeSection === 'ai' && category.anchor === 'text' && (
+                <div className="prompt-top-action-bar">
+                  <span className="prompt-meta-note">Полный текст системного промпта для языковых моделей</span>
+                  <button
+                    type="button"
+                    className="copy-prompt-btn"
+                    onClick={handleCopyPrompt}
+                    title="Скопировать весь промпт в буфер обмена"
+                  >
+                    <Icon name={copiedPrompt ? 'check' : 'terminal'} size={16} color="var(--accent-primary)" />
+                    <span>{copiedPrompt ? 'Скопировано!' : 'Скопировать промпт'}</span>
+                  </button>
+                </div>
+              )}
 
               <div className="questions-container">
                 {category.items.map((item) => (
@@ -282,19 +525,14 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           min-width: 0;
         }
 
-        /* Heading Zone */
-        .wiki-heading-zone {
+        /* Top Navigation Bar & Section Switcher */
+        .wiki-top-nav {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          min-height: 220px;
-          padding: 16px 0 32px 0;
-          position: relative;
-        }
-
-        .heading-left {
-          max-width: 850px;
-          min-width: 0;
+          flex-wrap: wrap;
+          gap: 16px;
+          margin-bottom: 24px;
         }
 
         .back-home-btn {
@@ -308,7 +546,6 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           color: var(--text-primary);
           font-size: 15px;
           font-weight: 500;
-          margin-bottom: 24px;
           transition: background-color 150ms ease, transform 150ms ease;
           border: 1px solid var(--border-subtle);
         }
@@ -318,16 +555,67 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           transform: translateX(-2px);
         }
 
+        /* Section Tabs Switcher */
+        .wiki-section-switch {
+          display: flex;
+          align-items: center;
+          background-color: var(--surface-soft);
+          border-radius: 24px;
+          padding: 4px;
+          gap: 4px;
+          border: 1px solid var(--border-subtle);
+        }
+
+        .section-tab-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          height: 38px;
+          border-radius: 19px;
+          padding: 0 18px;
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--text-secondary);
+          transition: background-color 150ms ease, color 150ms ease;
+          cursor: pointer;
+        }
+
+        .section-tab-pill:hover {
+          color: var(--text-primary);
+          background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .section-tab-pill.active {
+          background-color: var(--accent-container);
+          color: var(--text-primary);
+          font-weight: 600;
+        }
+
+        /* Heading Zone */
+        .wiki-heading-zone {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          min-height: 180px;
+          padding: 12px 0 28px 0;
+          position: relative;
+        }
+
+        .heading-left {
+          max-width: 850px;
+          min-width: 0;
+        }
+
         .wiki-eyebrow {
           font-size: 13px;
           font-weight: 600;
           letter-spacing: 0.08em;
           color: var(--accent-primary);
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
 
         .wiki-page-title {
-          font-size: clamp(34px, 5.5vw, 68px);
+          font-size: clamp(34px, 5.5vw, 64px);
           font-weight: 600;
           line-height: 1.15;
           letter-spacing: -0.025em;
@@ -337,24 +625,11 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
         }
 
         .wiki-lead-desc {
-          font-size: 17px;
+          font-size: 16.5px;
           line-height: 1.6;
           color: var(--text-secondary);
           margin-top: 12px;
           max-width: 780px;
-        }
-
-        .wiki-version-note {
-          display: inline-block;
-          margin-top: 14px;
-          padding: 8px 14px;
-          border-radius: 12px;
-          background-color: var(--surface-card);
-          border: 1px solid var(--border-subtle);
-          font-size: 13.5px;
-          color: var(--text-secondary);
-          font-family: var(--font-mono);
-          word-break: break-word;
         }
 
         .heading-right-emblem {
@@ -369,7 +644,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           display: grid;
           grid-template-columns: 340px 1fr;
           gap: 28px;
-          margin-top: 24px;
+          margin-top: 20px;
           align-items: start;
           min-width: 0;
         }
@@ -399,7 +674,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
         .wiki-toc-card {
           background-color: var(--surface-soft);
           border-radius: 28px;
-          padding: 20px 12px;
+          padding: 16px 12px;
           border: 1px solid var(--border-subtle);
           min-width: 0;
         }
@@ -440,20 +715,73 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           transform: rotate(180deg);
         }
 
-        .toc-list {
+        .toc-groups-container {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .toc-group {
           display: flex;
           flex-direction: column;
           gap: 4px;
         }
 
+        .toc-group-header {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 8px 12px;
+          border-radius: 12px;
+          background-color: transparent;
+          color: var(--text-secondary);
+          font-size: 12.5px;
+          font-weight: 600;
+          letter-spacing: 0.05em;
+          text-align: left;
+          cursor: pointer;
+          transition: background-color 150ms ease, color 150ms ease;
+        }
+
+        .toc-group-header:hover {
+          color: var(--text-primary);
+          background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .toc-group-header.current-group {
+          color: var(--accent-primary);
+          background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .group-title-text {
+          flex: 1;
+        }
+
+        .group-badge {
+          font-family: var(--font-mono);
+          font-size: 11px;
+          padding: 2px 6px;
+          border-radius: 6px;
+          background-color: var(--surface-card);
+          color: var(--text-secondary);
+        }
+
+        .toc-list {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding-left: 4px;
+        }
+
         .toc-item {
           display: flex;
           align-items: center;
-          gap: 12px;
-          min-height: 48px;
-          border-radius: 16px;
-          padding: 10px 14px;
-          font-size: 14.5px;
+          gap: 10px;
+          min-height: 44px;
+          border-radius: 14px;
+          padding: 8px 12px;
+          font-size: 14px;
           font-weight: 500;
           line-height: 1.35;
           color: var(--text-secondary);
@@ -475,7 +803,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
 
         .toc-num {
           font-family: var(--font-mono);
-          font-size: 13px;
+          font-size: 12.5px;
           opacity: 0.75;
           flex-shrink: 0;
         }
@@ -528,7 +856,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           color: var(--text-secondary);
         }
 
-        /* Articles */
+        /* Articles Content */
         .wiki-articles-content {
           display: flex;
           flex-direction: column;
@@ -573,6 +901,115 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           overflow-wrap: break-word;
         }
 
+        /* AI Cards Grid */
+        .ai-tools-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+          margin-bottom: 24px;
+        }
+
+        .ai-card {
+          background-color: var(--surface-soft);
+          border: 1px solid var(--border-subtle);
+          border-radius: 22px;
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          gap: 16px;
+        }
+
+        .ai-card-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .ai-card-icon {
+          width: 44px;
+          height: 44px;
+          border-radius: 14px;
+          background-color: var(--surface-card);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+
+        .ai-card-title {
+          font-size: 19px;
+          font-weight: 600;
+          color: var(--text-primary);
+        }
+
+        .ai-card-desc {
+          font-size: 14.5px;
+          line-height: 1.55;
+          color: var(--text-secondary);
+        }
+
+        .ai-card-desc code {
+          background-color: var(--surface-raised);
+          padding: 2px 6px;
+          border-radius: 6px;
+          font-family: var(--font-mono);
+          font-size: 13px;
+        }
+
+        .ai-card-actions {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-wrap: wrap;
+        }
+
+        .ai-btn {
+          height: 44px;
+          font-size: 14px;
+          padding: 0 16px;
+          border-radius: 22px;
+        }
+
+        /* Prompt Top Action Bar */
+        .prompt-top-action-bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 12px;
+          padding: 12px 16px;
+          background-color: var(--surface-soft);
+          border-radius: 14px;
+          border: 1px solid var(--border-subtle);
+          margin-bottom: 16px;
+        }
+
+        .prompt-meta-note {
+          font-size: 13.5px;
+          color: var(--text-secondary);
+        }
+
+        .copy-prompt-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          border-radius: 20px;
+          background-color: var(--surface-raised);
+          color: var(--text-primary);
+          font-size: 13px;
+          font-weight: 600;
+          transition: background-color 150ms ease, transform 150ms ease;
+          border: 1px solid var(--border-subtle);
+        }
+
+        .copy-prompt-btn:hover {
+          background-color: var(--accent-container);
+          transform: translateY(-1px);
+        }
+
+        /* Questions / Items */
         .questions-container {
           display: flex;
           flex-direction: column;
@@ -619,6 +1056,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           margin-top: 4px;
           max-width: 100%;
           box-sizing: border-box;
+          max-height: 600px;
         }
 
         .code-block code {
@@ -689,6 +1127,20 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
 
         /* Responsive Breakpoints */
         @media (max-width: 1199px) {
+          .wiki-top-nav {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .wiki-section-switch {
+            width: 100%;
+          }
+
+          .section-tab-pill {
+            flex: 1;
+            justify-content: center;
+          }
+
           .wiki-main-layout {
             grid-template-columns: 1fr;
             gap: 20px;
@@ -724,7 +1176,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
             align-items: center;
           }
 
-          .toc-list {
+          .toc-groups-container {
             display: none;
             margin-top: 10px;
             max-height: 380px;
@@ -732,7 +1184,7 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
             -webkit-overflow-scrolling: touch;
           }
 
-          .toc-list.mobile-open {
+          .toc-groups-container.mobile-open {
             display: flex;
           }
 
@@ -743,6 +1195,10 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           .community-hint-card.mobile-only {
             display: flex !important;
             margin-top: 8px;
+          }
+
+          .ai-tools-cards-grid {
+            grid-template-columns: 1fr;
           }
 
           .wiki-heading-zone {
@@ -762,15 +1218,20 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
             margin-top: 12px;
           }
 
+          .section-tab-pill {
+            padding: 0 12px;
+            font-size: 13px;
+            height: 36px;
+          }
+
           .wiki-heading-zone {
-            padding: 8px 0 20px 0;
+            padding: 8px 0 16px 0;
           }
 
           .back-home-btn {
             height: 40px;
             padding: 0 16px;
             font-size: 14px;
-            margin-bottom: 18px;
             border-radius: 20px;
           }
 
@@ -780,14 +1241,8 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           }
 
           .wiki-lead-desc {
-            font-size: 15px;
+            font-size: 14.5px;
             line-height: 1.5;
-            margin-top: 10px;
-          }
-
-          .wiki-version-note {
-            font-size: 12px;
-            padding: 6px 12px;
             margin-top: 10px;
           }
 
@@ -838,6 +1293,19 @@ export const FullWiki: React.FC<FullWikiProps> = ({ onNavigate }) => {
           .wiki-doc-table td {
             padding: 10px 12px;
             font-size: 12.5px;
+          }
+
+          .ai-card {
+            padding: 18px 16px;
+            border-radius: 18px;
+          }
+
+          .ai-card-title {
+            font-size: 17px;
+          }
+
+          .ai-card-desc {
+            font-size: 13.5px;
           }
 
           .community-hint-card {

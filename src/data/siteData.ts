@@ -1,4 +1,5 @@
 import { FeatureItem, RoadmapColumn, RoadmapStage, WikiCategory } from '../types';
+import { AI_PROMPT_TEXT } from './aiPromptData';
 
 export const SITE_LINKS = {
   home: '/',
@@ -1038,3 +1039,72 @@ export const WIKI_CATEGORIES: WikiCategory[] = [
     ]
   }
 ];
+
+export const WIKI_SDK_CATEGORIES: WikiCategory[] = WIKI_CATEGORIES;
+
+export const WIKI_AI_CATEGORIES: WikiCategory[] = [
+  {
+    id: 'wiki-ai-01',
+    number: '01',
+    title: 'Инструменты для ИИ',
+    anchor: 'ai-tools',
+    items: [
+      {
+        id: 'wiki-ai-01-01',
+        question: 'Скилл для Claude Code и промпт для чата',
+        category: 'Инструменты для ИИ',
+        answer: 'Инструкция для языковых моделей, которые пишут плагины exDesktop или переносят на ПК плагины exteraGram. В ней описаны API, работающие перехваты Android, таблица замен и правила защиты.'
+      }
+    ]
+  },
+  {
+    id: 'wiki-ai-02',
+    number: '02',
+    title: 'Установка скилла',
+    anchor: 'install',
+    items: [
+      {
+        id: 'wiki-ai-02-01',
+        question: 'Установка скилла',
+        category: 'Установка скилла',
+        answer: 'В Windows папка скиллов находится в %USERPROFILE%\\.claude\\skills.',
+        code: 'mkdir -p ~/.claude/skills/exdesktop-plugins\ncurl -fsSL https://exdesktop.xyz/docs/ai/exdesktop-plugins/SKILL.md -o ~/.claude/skills/exdesktop-plugins/SKILL.md'
+      }
+    ]
+  },
+  {
+    id: 'wiki-ai-03',
+    number: '03',
+    title: 'Порядок работы',
+    anchor: 'usage',
+    items: [
+      {
+        id: 'wiki-ai-03-01',
+        question: 'Порядок работы',
+        category: 'Порядок работы',
+        answer: 'Встроенный в exDesktop ИИ-перенос использует тот же набор правил, но отправляет модели только нужные разделы и сам проверяет результат.',
+        bullets: [
+          'Модель получает промпт и полный исходный код плагина.',
+          'В ответ она возвращает готовый файл .plugin и отчёт с разделами kept, changed и dropped.',
+          'Файл устанавливается в exDesktop через обычное окно установки с проверкой PluginGuard.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'wiki-ai-04',
+    number: '04',
+    title: 'Текст промпта',
+    anchor: 'text',
+    items: [
+      {
+        id: 'wiki-ai-04-01',
+        question: 'Текст промпта',
+        category: 'Текст промпта',
+        code: AI_PROMPT_TEXT
+      }
+    ]
+  }
+];
+
+export { AI_PROMPT_TEXT };

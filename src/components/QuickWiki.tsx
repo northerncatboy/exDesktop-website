@@ -98,6 +98,21 @@ export const QuickWiki: React.FC<QuickWikiProps> = ({ onNavigate }) => {
               <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
             </div>
           </a>
+
+          {/* Question 5: Link to /wiki/ai */}
+          <a
+            href="/wiki/ai"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('/wiki/ai');
+            }}
+            className="wiki-link-row"
+          >
+            <span className="question-row-title">Скилл и промпт для ИИ (написание плагинов)</span>
+            <div className="wiki-chevron-right">
+              <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
+            </div>
+          </a>
         </div>
       </div>
 
