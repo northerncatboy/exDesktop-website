@@ -1,0 +1,51 @@
+{
+  "cli_version": "0.13.4",
+  "checkpoint_id": "01M7R2G4WWY6CRQ20Q6KNB8YAQ",
+  "strategy": "manual-commit",
+  "branch": "release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "index.html",
+    "src/App.tsx",
+    "src/components/Features.tsx",
+    "src/components/FullFaq.tsx",
+    "src/components/Header.tsx",
+    "src/components/Hero.tsx",
+    "src/components/Installation.tsx",
+    "src/components/MobileMenu.tsx",
+    "src/components/QuickFaq.tsx",
+    "src/components/Roadmap.tsx",
+    "src/components/VisualPreview.tsx",
+    "src/data/siteData.ts",
+    "src/types.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 362728,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 12869585,
+    "output_tokens": 42212,
+    "api_call_count": 102
+  },
+  "redaction": {
+    "replacements": 49,
+    "layers": {
+      "betterleaks": 7,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 25,
+      "key_context": 19,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
