@@ -317,39 +317,66 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         @media (max-width: 767px) {
           .hero-section {
             border-radius: 28px;
-            padding: 32px 20px;
+            padding: 28px 16px;
             margin-top: 16px;
           }
           .hero-title {
-            font-size: 54px;
+            font-size: clamp(38px, 11vw, 54px);
+            word-break: break-word;
           }
           .hero-slogan {
-            font-size: 24px;
-            line-height: 30px;
+            font-size: clamp(20px, 5.5vw, 24px);
+            line-height: 1.25;
+            margin-bottom: 12px;
           }
           .hero-description {
-            font-size: 18px;
-            line-height: 27px;
+            font-size: clamp(15px, 4vw, 17px);
+            line-height: 1.45;
+            margin-bottom: 24px;
           }
           .hero-actions {
             flex-direction: column;
             width: 100%;
-            gap: 12px;
+            gap: 10px;
           }
           .hero-download-btn,
           .hero-learn-btn {
             width: 100%;
+            height: 48px;
+            font-size: 15px;
+          }
+          .hero-decor.flower {
+            transform: scale(0.55);
+            top: -90px;
+            right: -40px;
+            opacity: 0.35;
           }
           .portrait-container {
-            width: 280px;
-            height: 280px;
+            width: 348px;
+            height: 348px;
             transform: scale(0.82);
+            transform-origin: center center;
+            margin: -24px auto -20px auto;
           }
           .developer-signature {
             width: 100%;
-            max-width: 320px;
-            font-size: 16px;
-            margin-top: 12px;
+            max-width: 280px;
+            height: 50px;
+            font-size: 15px;
+            margin-top: 4px;
+            border-radius: 20px;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .portrait-container {
+            transform: scale(0.72);
+            margin: -36px auto -30px auto;
+          }
+          .developer-signature {
+            max-width: 240px;
+            height: 44px;
+            font-size: 14px;
           }
         }
       `}</style>

@@ -123,6 +123,9 @@ export const Footer: React.FC = () => {
           .footer-pill-btn {
             font-size: 14px;
             height: 48px;
+            padding: 0 12px;
+            min-width: 0;
+            white-space: nowrap;
           }
           .footer-bottom-info {
             flex-direction: column;

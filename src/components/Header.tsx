@@ -250,14 +250,18 @@ export const Header: React.FC<HeaderProps> = ({
 
         @media (max-width: 767px) {
           .site-header {
-            height: 72px;
+            height: 64px;
+            margin-bottom: 8px;
           }
           .brand-mark {
             width: 36px;
             height: 36px;
           }
           .brand-text {
-            font-size: 22px;
+            font-size: 20px;
+          }
+          .header-actions {
+            gap: 8px;
           }
           .desktop-nav,
           .desktop-github-btn {

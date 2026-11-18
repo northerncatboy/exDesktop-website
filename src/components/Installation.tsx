@@ -110,6 +110,7 @@ export const Installation: React.FC = () => {
           flex-direction: column;
           justify-content: space-between;
           min-height: 352px;
+          min-width: 0;
         }
 
         .install-title {
@@ -133,6 +134,8 @@ export const Installation: React.FC = () => {
           cursor: pointer;
           transition: background-color 150ms ease, box-shadow 150ms ease;
           border: 1px solid rgba(255, 255, 255, 0.05);
+          min-width: 0;
+          max-width: 100%;
         }
 
         .terminal-box:hover {
@@ -184,10 +187,12 @@ export const Installation: React.FC = () => {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          font-size: 16px;
+          font-size: 15px;
+          line-height: 1.4;
           color: var(--accent-primary);
           font-weight: 500;
           text-decoration: none;
+          flex-wrap: wrap;
         }
 
         .windows-link:hover {
@@ -204,6 +209,7 @@ export const Installation: React.FC = () => {
           justify-content: space-between;
           min-height: 352px;
           position: relative;
+          min-width: 0;
         }
 
         .repo-top {

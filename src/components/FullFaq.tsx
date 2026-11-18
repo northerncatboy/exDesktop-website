@@ -8,6 +8,7 @@ interface FullFaqProps {
 
 export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
   const [activeCategory, setActiveCategory] = useState<string>('start');
+  const [mobileTocOpen, setMobileTocOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
@@ -23,6 +24,7 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
   const handleCategoryClick = (e: React.MouseEvent, anchor: string) => {
     e.preventDefault();
     setActiveCategory(anchor);
+    setMobileTocOpen(false);
     window.history.pushState(null, '', `/faq#${anchor}`);
     const el = document.getElementById(anchor);
     if (el) {
@@ -61,8 +63,18 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         {/* Left Side: Table of Contents & Community Hint */}
         <aside className="faq-sidebar">
           <div className="faq-toc-card">
-            <span className="toc-title">В ЭТОМ РАЗДЕЛЕ</span>
-            <nav className="toc-list" aria-label="Оглавление FAQ">
+            <button
+              type="button"
+              className="toc-header-toggle"
+              onClick={() => setMobileTocOpen(!mobileTocOpen)}
+              aria-expanded={mobileTocOpen}
+            >
+              <span className="toc-title">В ЭТОМ РАЗДЕЛЕ ({FAQ_CATEGORIES.length})</span>
+              <span className={`toc-toggle-indicator ${mobileTocOpen ? 'open' : ''}`} aria-hidden="true">
+                <Icon name="arrow_down" size={20} color="var(--text-primary)" />
+              </span>
+            </button>
+            <nav className={`toc-list ${mobileTocOpen ? 'mobile-open' : ''}`} aria-label="Оглавление FAQ">
               {FAQ_CATEGORIES.map((cat) => (
                 <a
                   key={cat.id}
@@ -255,7 +267,18 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         .faq-toc-card {
           background-color: var(--surface-soft);
           border-radius: 28px;
-          padding: 24px 12px;
+          padding: 20px 12px;
+        }
+
+        .toc-header-toggle {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 12px;
+          margin-bottom: 12px;
+          cursor: default;
+          text-align: left;
         }
 
         .toc-title {
@@ -263,9 +286,16 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           font-weight: 600;
           letter-spacing: 0.08em;
           color: var(--text-secondary);
-          margin-left: 12px;
-          margin-bottom: 16px;
           display: block;
+        }
+
+        .toc-toggle-indicator {
+          display: none;
+          transition: transform 200ms ease;
+        }
+
+        .toc-toggle-indicator.open {
+          transform: rotate(180deg);
         }
 
         .toc-list {
@@ -480,15 +510,37 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
         @media (max-width: 1199px) {
           .faq-main-layout {
             grid-template-columns: 1fr;
+            gap: 20px;
           }
           .faq-sidebar {
             position: static;
             max-height: none;
             overflow-y: visible;
+            padding-right: 0;
+          }
+          .toc-header-toggle {
+            cursor: pointer;
+            padding: 8px 12px;
+            margin-bottom: 0;
+          }
+          .toc-toggle-indicator {
+            display: flex;
+            align-items: center;
+          }
+          .toc-list {
+            display: none;
+            margin-top: 12px;
+            max-height: 380px;
+            overflow-y: auto;
+          }
+          .toc-list.mobile-open {
+            display: flex;
           }
           .faq-heading-zone {
             flex-direction: column;
             align-items: flex-start;
+            min-height: auto;
+            padding: 12px 0 24px 0;
           }
           .heading-right-emblem {
             display: none;
@@ -497,30 +549,42 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
         @media (max-width: 767px) {
           .faq-page-title {
-            font-size: 44px;
+            font-size: clamp(32px, 8.5vw, 44px);
             line-height: 1.15;
           }
           .faq-article-section {
-            padding: 22px 18px;
+            padding: 22px 16px;
             border-radius: 20px;
           }
+          .section-number {
+            font-size: 20px;
+          }
           .section-title {
-            font-size: 22px;
+            font-size: 21px;
+            line-height: 1.25;
           }
           .item-question {
-            font-size: 18px;
+            font-size: 17px;
+            line-height: 1.35;
           }
           .item-answer {
             font-size: 15px;
+            line-height: 1.5;
+            word-break: break-word;
+            overflow-wrap: break-word;
           }
           .code-block {
             padding: 12px 14px;
             font-size: 13px;
           }
+          .item-bullets {
+            padding-left: 18px;
+            font-size: 14.5px;
+          }
           .faq-doc-table th,
           .faq-doc-table td {
             padding: 10px 12px;
-            font-size: 13.5px;
+            font-size: 13px;
           }
         }
       `}</style>

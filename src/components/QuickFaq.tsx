@@ -107,6 +107,7 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           flex-direction: column;
           justify-content: space-between;
           min-height: 468px;
+          min-width: 0;
         }
 
         .faq-icon-emblem {
@@ -153,12 +154,14 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           display: flex;
           flex-direction: column;
           gap: 16px;
+          min-width: 0;
         }
 
         .faq-expanded-card {
           background-color: var(--surface-card);
           border-radius: 28px;
           padding: 28px;
+          min-width: 0;
         }
 
         .faq-card-header {
@@ -166,6 +169,7 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           align-items: center;
           justify-content: space-between;
           margin-bottom: 12px;
+          gap: 12px;
         }
 
         .question-title {
@@ -190,6 +194,8 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           text-decoration: none;
           transition: background-color 150ms ease, transform 150ms ease;
           min-height: 96px;
+          min-width: 0;
+          gap: 16px;
         }
 
         .faq-link-row:hover {
@@ -217,19 +223,30 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           .quick-faq-section {
             margin-top: 40px;
           }
+          .faq-intro-card {
+            border-radius: 28px;
+            padding: 24px 20px;
+          }
           .intro-headline {
-            font-size: 32px;
+            font-size: clamp(26px, 7vw, 32px);
+          }
+          .full-faq-btn {
+            height: 52px;
+            padding: 0 20px;
+            font-size: 15px;
           }
           .question-title,
           .question-row-title {
-            font-size: 18px;
+            font-size: 17px;
           }
           .answer-content {
             font-size: 15px;
+            line-height: 1.5;
           }
           .faq-expanded-card,
           .faq-link-row {
-            padding: 20px;
+            padding: 20px 18px;
+            border-radius: 22px;
           }
         }
       `}</style>
