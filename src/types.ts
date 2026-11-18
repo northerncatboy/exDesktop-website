@@ -13,7 +13,7 @@ export interface FaqItem {
   source?: string;
   code?: string;
   bullets?: string[];
-  table?: FaqTable;
+  table?: FaqTable | null;
 }
 
 export interface FaqCategory {
@@ -22,6 +22,21 @@ export interface FaqCategory {
   title: string;
   anchor: string;
   items: FaqItem[];
+}
+
+export interface RoadmapItem {
+  id: string;
+  title: string;
+  text?: string;
+  version?: string;
+  status: 'progress' | 'planned' | 'done';
+}
+
+export interface RoadmapColumn {
+  id: string;
+  status: 'progress' | 'planned' | 'done';
+  title: string;
+  items: RoadmapItem[];
 }
 
 export interface RoadmapStage {

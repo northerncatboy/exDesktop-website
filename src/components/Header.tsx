@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
           className={`nav-pill ${isFaq ? 'active' : ''}`}
           aria-current={isFaq ? 'page' : undefined}
         >
-          FAQ
+          WIKI
         </a>
       </nav>
 

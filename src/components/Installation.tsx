@@ -21,7 +21,7 @@ export const Installation: React.FC = () => {
         <div className="install-card">
           <div className="install-header">
             <h2 className="install-title">Установить exDesktop</h2>
-            <p className="install-subtitle">Linux и macOS — открой терминал и выполни команду.</p>
+            <p className="install-subtitle">Для Linux / macOS выполни команду</p>
           </div>
 
           <div className="terminal-box" onClick={handleCopy} title="Нажмите, чтобы скопировать команду">
@@ -73,7 +73,7 @@ export const Installation: React.FC = () => {
           </div>
 
           <div className="repo-text-group">
-            <h3 className="repo-title">Открытый код.<br />Общие возможности.</h3>
+            <h3 className="repo-title">Открытый исходный код.<br />Лицензия GPL 3.0</h3>
             <p className="repo-desc">Смотри, как всё устроено, предлагай идеи и участвуй в развитии.</p>
           </div>
 

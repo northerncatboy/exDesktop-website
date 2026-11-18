@@ -8,7 +8,7 @@ interface FullFaqProps {
 }
 
 export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
-  const [activeCategory, setActiveCategory] = useState<string>('start');
+  const [activeCategory, setActiveCategory] = useState<string>(FAQ_CATEGORIES[0]?.anchor || 'форматы-плагинов');
   const [mobileTocOpen, setMobileTocOpen] = useState<boolean>(false);
   const isManualScroll = useRef<boolean>(false);
   const scrollTimeout = useRef<number | null>(null);
@@ -16,7 +16,8 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
 
   useEffect(() => {
     // Check initial hash
-    const hash = window.location.hash.replace('#', '');
+    const rawHash = window.location.hash.replace('#', '');
+    const hash = rawHash ? decodeURIComponent(rawHash) : '';
     if (hash) {
       setActiveCategory(hash);
       const el = document.getElementById(hash);
@@ -131,8 +132,12 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
             <span>На главную</span>
           </a>
 
-          <div className="faq-eyebrow">ПОМОЩЬ / FAQ</div>
-          <h1 className="faq-page-title">Ответы. Без лишнего.</h1>
+          <div className="faq-eyebrow">ДОКУМЕНТАЦИЯ / WIKI</div>
+          <h1 className="faq-page-title">SDK плагинов exDesktop</h1>
+          <p className="faq-lead-desc">
+            exDesktop запускает плагины exteraGram на компьютере. Совместимость с SDK 1.4.6.2, эмуляция Android, хуки, защита и особенности ПК.
+          </p>
+          <div className="faq-version-note">Описание соответствует exDesktop 7.4.3.2.</div>
         </div>
 
         <div className="heading-right-emblem" aria-hidden="true">
@@ -151,12 +156,12 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
               onClick={() => setMobileTocOpen(!mobileTocOpen)}
               aria-expanded={mobileTocOpen}
             >
-              <span className="toc-title">В ЭТОМ РАЗДЕЛЕ ({FAQ_CATEGORIES.length})</span>
+              <span className="toc-title">РАЗДЕЛЫ WIKI ({FAQ_CATEGORIES.length})</span>
               <span className={`toc-toggle-indicator ${mobileTocOpen ? 'open' : ''}`} aria-hidden="true">
                 <Icon name="arrow_down" size={20} color="var(--text-primary)" />
               </span>
             </button>
-            <nav className={`toc-list ${mobileTocOpen ? 'mobile-open' : ''}`} aria-label="Оглавление FAQ">
+            <nav className={`toc-list ${mobileTocOpen ? 'mobile-open' : ''}`} aria-label="Оглавление WIKI">
               {FAQ_CATEGORIES.map((cat) => (
                 <a
                   key={cat.id}
@@ -308,6 +313,26 @@ export const FullFaq: React.FC<FullFaqProps> = ({ onNavigate }) => {
           letter-spacing: -0.02em;
           color: var(--text-primary);
           margin-bottom: 8px;
+        }
+
+        .faq-lead-desc {
+          font-size: 17px;
+          line-height: 1.6;
+          color: var(--text-secondary);
+          margin-top: 12px;
+          max-width: 780px;
+        }
+
+        .faq-version-note {
+          display: inline-block;
+          margin-top: 14px;
+          padding: 8px 14px;
+          border-radius: 12px;
+          background-color: var(--surface-card);
+          border: 1px solid var(--border-subtle);
+          font-size: 13.5px;
+          color: var(--text-secondary);
+          font-family: var(--font-mono);
         }
 
         .heading-right-emblem {

@@ -44,7 +44,7 @@ export const App: React.FC = () => {
   // Update page title
   useEffect(() => {
     if (currentPath.startsWith('/faq')) {
-      document.title = 'FAQ — exDesktop';
+      document.title = 'WIKI — exDesktop';
     } else {
       document.title = 'exDesktop — кастомный клиент Telegram';
     }

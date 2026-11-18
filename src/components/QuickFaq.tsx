@@ -17,19 +17,19 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
               <Icon name="help" size={40} color="var(--accent-primary)" />
             </div>
             <h2 className="intro-headline">
-              Есть вопросы?<br />Есть ответы.
+              Остались вопросы?<br />Хотите что-то узнать?
             </h2>
           </div>
 
           <a
-            href={SITE_LINKS.faq}
+            href={SITE_LINKS.wiki}
             onClick={(e) => {
               e.preventDefault();
               onNavigate('/faq');
             }}
             className="full-faq-btn"
           >
-            <span>Читать полный FAQ</span>
+            <span>Открыть WIKI</span>
             <Icon name="arrow_right" size={22} color="currentColor" />
           </a>
         </div>
@@ -39,46 +39,61 @@ export const QuickFaq: React.FC<QuickFaqProps> = ({ onNavigate }) => {
           {/* Question 1: Expanded by default */}
           <div className="faq-expanded-card">
             <div className="faq-card-header">
-              <h3 className="question-title">Что такое exDesktop?</h3>
+              <h3 className="question-title">Форматы плагинов и совместимость</h3>
               <div className="faq-chevron-down">
                 <Icon name="arrow_down" size={24} color="var(--text-secondary)" />
               </div>
             </div>
             <div className="answer-content">
               <p>
-                Модифицированный кросс-платформенный клиент для Windows, Linux и macOS на основе исходного кода Telegram.
+                exDesktop запускает плагины exteraGram на компьютере. Движок плагинов совместим с SDK exteraGram 1.4.6.2: плагин из каталога устанавливается без изменений, а его функции работают в той мере, в которой у них есть аналог на ПК.
               </p>
               <p style={{ marginTop: '8px' }}>
-                Material Design Expressive, глубокая кастомизация, функции приватности, настройки визуала, режим стримера, функционал exteraGram, AyuGram и других клиентов сообщества, адаптированный под Desktop.
+                Поддерживаются форматы однофайловых плагинов (.plugin, .py) и архивы Elyx (.elyx, .eaf). Метаданные читаются безопасно из констант верхнего уровня без выполнения кода.
               </p>
             </div>
           </div>
 
-          {/* Question 2: Link to /faq#installation */}
+          {/* Question 2: Link to /faq#что-работает-так-же-как-на-android */}
           <a
-            href={SITE_LINKS.faqInstallation}
+            href="/faq#что-работает-так-же-как-на-android"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('/faq#installation');
+              onNavigate('/faq#что-работает-так-же-как-на-android');
             }}
             className="faq-link-row"
           >
-            <span className="question-row-title">Какие системы поддерживаются?</span>
+            <span className="question-row-title">Что работает так же, как на Android?</span>
             <div className="faq-chevron-right">
               <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
             </div>
           </a>
 
-          {/* Question 3: Link to /faq#community */}
+          {/* Question 3: Link to /faq#эмуляция-java-и-android */}
           <a
-            href={SITE_LINKS.faqCommunity}
+            href="/faq#эмуляция-java-и-android"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate('/faq#community');
+              onNavigate('/faq#эмуляция-java-и-android');
             }}
             className="faq-link-row"
           >
-            <span className="question-row-title">Где читать об обновлениях?</span>
+            <span className="question-row-title">Эмуляция Java, Android и Xposed-хуки</span>
+            <div className="faq-chevron-right">
+              <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
+            </div>
+          </a>
+
+          {/* Question 4: Link to /faq#защита */}
+          <a
+            href="/faq#защита"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('/faq#защита');
+            }}
+            className="faq-link-row"
+          >
+            <span className="question-row-title">Песочница, защита данных и PluginGuard</span>
             <div className="faq-chevron-right">
               <Icon name="arrow_right" size={24} color="var(--text-secondary)" />
             </div>

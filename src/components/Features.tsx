@@ -6,8 +6,7 @@ export const Features: React.FC = () => {
   return (
     <section className="features-section" id="features">
       <div className="section-header">
-        <h2 className="section-title">Больше свободы в привычном Telegram</h2>
-        <p className="section-subtitle">Неофициальный клиент на основе Telegram Desktop. Выбирай то, что важно тебе.</p>
+        <h2 className="section-title">Функционал exDesktop</h2>
       </div>
 
       <div className="features-grid">

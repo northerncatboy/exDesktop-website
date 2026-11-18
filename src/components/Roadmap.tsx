@@ -1,6 +1,5 @@
 import React from 'react';
-import { Icon } from './Icon';
-import { ROADMAP_STAGES } from '../data/siteData';
+import { ROADMAP_COLUMNS } from '../data/siteData';
 
 export const Roadmap: React.FC = () => {
   return (
@@ -9,38 +8,24 @@ export const Roadmap: React.FC = () => {
         <h2 className="section-title">Roadmap</h2>
       </div>
 
-      <div className="roadmap-grid">
-        {ROADMAP_STAGES.map((stage) => (
-          <div
-            key={stage.id}
-            className={`roadmap-card ${stage.isAccent ? 'accent-stage' : ''}`}
-          >
-            <div className="stage-top">
-              <div className="stage-badge">
-                <Icon
-                  name={stage.statusIcon}
-                  size={16}
-                  color={stage.isAccent ? 'var(--text-on-accent)' : 'var(--accent-primary)'}
-                />
-                <span>{stage.badge}</span>
-              </div>
-              <span className="stage-num">{stage.number}</span>
+      <div className="rm-grid">
+        {ROADMAP_COLUMNS.map((col) => (
+          <div key={col.id} className={`rm-col rm-${col.status}`}>
+            <div className="rm-head">
+              <span className="rm-dot" aria-hidden="true" />
+              <span className="rm-col-title">{col.title}</span>
+              <span className="rm-count">{col.items.length}</span>
             </div>
 
-            <div className="stage-content">
-              <h3 className="stage-title">{stage.title}</h3>
-              <p className="stage-desc">{stage.description}</p>
-            </div>
-
-            <a
-              href={stage.linkUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="stage-link"
-            >
-              <span>{stage.linkLabel}</span>
-              <Icon name="arrow_right" size={18} color="currentColor" />
-            </a>
+            <ul className="rm-list">
+              {col.items.map((item) => (
+                <li key={item.id} className="rm-item">
+                  <div className="rm-item-title">{item.title}</div>
+                  {item.text && <div className="rm-item-text">{item.text}</div>}
+                  {item.version && <span className="rm-ver-badge">{item.version}</span>}
+                </li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
@@ -62,110 +47,123 @@ export const Roadmap: React.FC = () => {
           margin-bottom: 8px;
         }
 
-        .section-subtitle {
-          font-size: 18px;
-          color: var(--text-secondary);
-        }
-
-        .roadmap-grid {
+        .rm-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 24px;
+          gap: 20px;
         }
 
-        .roadmap-card {
+        .rm-col {
           background-color: var(--surface-card);
-          border-radius: 28px;
-          padding: 24px;
-          min-height: 232px;
+          border: 1px solid var(--border-subtle);
+          border-radius: 24px;
+          padding: 24px 22px 16px;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
-          transition: transform 150ms ease, background-color 150ms ease;
+          min-width: 0;
+          transition: border-color 200ms ease, background-color 200ms ease;
         }
 
-        .roadmap-card:hover {
-          transform: translateY(-2px);
+        .rm-col:hover {
           background-color: var(--surface-raised);
+          border-color: var(--accent-outline);
         }
 
-        .roadmap-card.accent-stage {
-          background-color: var(--accent-container);
-        }
-
-        .stage-top {
+        .rm-head {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-        }
-
-        .stage-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 6px 14px;
-          border-radius: 15px;
-          background-color: var(--surface-soft);
-          font-size: 13px;
+          gap: 10px;
+          padding-bottom: 14px;
+          border-bottom: 1px solid var(--border-subtle);
           font-weight: 600;
-          color: var(--text-primary);
-        }
-
-        .accent-stage .stage-badge {
-          background-color: var(--accent-primary);
-          color: var(--text-on-accent);
-        }
-
-        .stage-num {
           font-size: 16px;
-          font-weight: 600;
-          color: var(--text-secondary);
-          font-family: var(--font-mono);
-        }
-
-        .stage-content {
-          margin: 16px 0 12px 0;
-        }
-
-        .stage-title {
-          font-size: 20px;
-          font-weight: 600;
           color: var(--text-primary);
-          margin-bottom: 8px;
         }
 
-        .stage-desc {
+        .rm-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+          flex: none;
+          background-color: var(--text-secondary);
+        }
+
+        .rm-progress .rm-dot {
+          background-color: var(--accent-primary);
+          box-shadow: 0 0 8px rgba(255, 180, 169, 0.4);
+        }
+
+        .rm-done .rm-dot {
+          background-color: #4fb27a;
+          box-shadow: 0 0 8px rgba(79, 178, 122, 0.4);
+        }
+
+        .rm-count {
+          margin-left: auto;
+          font-family: var(--font-mono);
+          font-size: 13px;
+          color: var(--text-secondary);
+          font-weight: 500;
+        }
+
+        .rm-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .rm-item {
+          padding: 16px 0;
+          border-bottom: 1px solid var(--border-subtle);
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .rm-item:last-child {
+          border-bottom: none;
+        }
+
+        .rm-item-title {
+          font-weight: 500;
           font-size: 15px;
           line-height: 1.45;
-          color: var(--text-secondary);
-        }
-
-        .stage-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 15px;
-          font-weight: 600;
-          color: var(--accent-primary);
-          text-decoration: none;
-        }
-
-        .accent-stage .stage-link {
           color: var(--text-primary);
+          word-break: break-word;
         }
 
-        .stage-link:hover {
-          text-decoration: underline;
+        .rm-item-text {
+          color: var(--text-secondary);
+          font-size: 13.5px;
+          line-height: 1.5;
         }
 
-        .roadmap-note {
-          margin-top: 16px;
-          font-size: 13px;
+        .rm-ver-badge {
+          display: inline-block;
+          align-self: flex-start;
+          margin-top: 4px;
+          font-family: var(--font-mono);
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 6px;
+          background-color: var(--surface-soft);
           color: var(--text-secondary);
         }
 
-        @media (max-width: 1199px) {
-          .roadmap-grid {
+        .rm-progress .rm-ver-badge {
+          background-color: var(--accent-container);
+          color: var(--accent-primary);
+        }
+
+        .rm-done .rm-ver-badge {
+          background-color: rgba(79, 178, 122, 0.15);
+          color: #4fb27a;
+        }
+
+        @media (max-width: 1024px) {
+          .rm-grid {
             grid-template-columns: 1fr;
             gap: 16px;
           }
@@ -178,8 +176,9 @@ export const Roadmap: React.FC = () => {
           .section-title {
             font-size: 26px;
           }
-          .section-subtitle {
-            font-size: 16px;
+          .rm-col {
+            padding: 20px 18px 12px;
+            border-radius: 20px;
           }
         }
       `}</style>

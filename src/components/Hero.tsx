@@ -51,9 +51,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         {/* H1 Heading */}
         <h1 className="hero-title">exDesktop</h1>
 
-        {/* Slogan */}
-        <p className="hero-slogan">Твой Telegram. Твои правила.</p>
-
         {/* Description */}
         <p className="hero-description">
           Модифицированный кросс-платформенный клиент для Windows, Linux и macOS на основе исходного кода Telegram
