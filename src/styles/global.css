@@ -1,0 +1,166 @@
+@import './variables.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-main);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 250ms ease, color 250ms ease;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Typography elements */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 150ms ease, background-color 150ms ease, transform 150ms ease;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  transition: background-color 150ms ease, transform 150ms ease, opacity 150ms ease;
+}
+
+/* Accessibility Focus Ring */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* App Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 64px 32px 64px;
+  position: relative;
+}
+
+@media (max-width: 1199px) {
+  .app-container {
+    padding: 0 32px 32px 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-container {
+    padding: 0 16px 24px 16px;
+  }
+}
+
+/* Rotation Animations */
+@keyframes rotateClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateCounterClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.anim-sunny {
+  animation: rotateClockwise 40s linear infinite;
+  transform-origin: 174px 174px;
+}
+
+.anim-flower {
+  animation: rotateClockwise 40s linear infinite;
+  transform-origin: 155px 155px;
+}
+
+.anim-clover {
+  animation: rotateCounterClockwise 28s linear infinite;
+  transform-origin: 65px 65px;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .anim-sunny,
+  .anim-flower,
+  .anim-clover {
+    animation: none !important;
+  }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Common interactive pill button */
+.pill-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 26px;
+  padding: 0 24px;
+  font-weight: 600;
+  font-size: 16px;
+  height: 52px;
+  user-select: none;
+  position: relative;
+}
+
+.pill-button.primary {
+  background-color: var(--accent-primary);
+  color: var(--text-on-accent);
+}
+
+.pill-button.primary:hover {
+  filter: brightness(0.95);
+  opacity: 0.94;
+}
+
+.pill-button.primary:active {
+  filter: brightness(0.9);
+}
+
+.pill-button.secondary {
+  background-color: var(--surface-raised);
+  color: var(--text-primary);
+}
+
+.pill-button.secondary:hover {
+  opacity: 0.92;
+}
+
+.pill-button.secondary:active {
+  opacity: 0.86;
+}

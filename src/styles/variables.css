@@ -1,0 +1,50 @@
+:root {
+  /* Dark Theme Tokens (Default) */
+  --bg-page: #181216;
+  --surface-soft: #211a1e;
+  --surface-card: #2b2227;
+  --surface-raised: #382c33;
+  --text-primary: #f3e2e9;
+  --text-secondary: #d4bfc9;
+  --accent-primary: #ffb0d0;
+  --text-on-accent: #531e37;
+  --accent-container: #753f58;
+  --divider: #59434f;
+  --terminal-bg: #151014;
+  --terminal-command: #ffd8e8;
+  --terminal-sub: #bba6b1;
+  --repo-btn-bg: #ffd8e8;
+  --repo-btn-text: #531e37;
+  --repo-title: #ffffff;
+  --repo-desc: #ffe2ef;
+  --badge-bg: #753f58;
+  --badge-text: #ffd8e8;
+  --focus-ring: #ffb0d0;
+  --font-main: 'Roboto Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --max-content-width: 1312px;
+}
+
+[data-theme='light'] {
+  /* Light Theme Tokens */
+  --bg-page: #fff8f8;
+  --surface-soft: #faedf2;
+  --surface-card: #f3e4eb;
+  --surface-raised: #eedce5;
+  --text-primary: #291c23;
+  --text-secondary: #715c67;
+  --accent-primary: #8a3e62;
+  --text-on-accent: #ffffff;
+  --accent-container: #ffd8e8;
+  --divider: #dcc1cf;
+  --terminal-bg: #151014;
+  --terminal-command: #ffd8e8;
+  --terminal-sub: #bba6b1;
+  --repo-btn-bg: #8a3e62;
+  --repo-btn-text: #ffffff;
+  --repo-title: #291c23;
+  --repo-desc: #715c67;
+  --badge-bg: #ffd8e8;
+  --badge-text: #8a3e62;
+  --focus-ring: #8a3e62;
+}
