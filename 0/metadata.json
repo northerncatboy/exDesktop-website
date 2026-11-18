@@ -1,0 +1,48 @@
+{
+  "cli_version": "0.13.4",
+  "checkpoint_id": "01M7R2S73FGEZCBSH4RYAS39V4",
+  "session_id": "38cca9af-f43d-418d-9c52-ba4770d327c9",
+  "strategy": "manual-commit",
+  "created_at": "2026-11-18T19:40:18.0285989Z",
+  "branch": "release",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".github/workflows/deploy.yml"
+  ],
+  "agent": "Antigravity",
+  "model": "",
+  "turn_id": "7edc6f3f2efc",
+  "checkpoint_transcript_start": 1252,
+  "transcript_lines_at_start": 1252,
+  "token_usage": {
+    "input_tokens": 56021,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 3941446,
+    "output_tokens": 7102,
+    "api_call_count": 21
+  },
+  "session_token_usage": {
+    "input_tokens": 2362659,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 76095034,
+    "output_tokens": 265603,
+    "api_call_count": 632
+  },
+  "redaction": {
+    "replacements": 49,
+    "layers": {
+      "betterleaks": 7,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 25,
+      "key_context": 19,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  },
+  "session_metrics": {
+    "turn_count": 7
+  }
+}

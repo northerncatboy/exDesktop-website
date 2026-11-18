@@ -1,0 +1,4 @@
+Branch "main" is not allowed to deploy to github-pages due to environment protection rules.
+The deployment was rejected or didn't satisfy other protection rules.
+
+Не задеплоилось чето
